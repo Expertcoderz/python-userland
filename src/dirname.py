@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 
-import os
 from optparse import OptionParser
+from pathlib import PurePath
 
 
-def dirname(opts, names: list[str]):
-    for name in names:
-        print(os.path.dirname(name) or ".", end="\0" if opts.zero else "\n")
+def dirname(opts, paths: list[PurePath]):
+    for path in paths:
+        print(path.parent, end="\0" if opts.zero else "\n")
 
 
 if __name__ == "__main__":
@@ -32,4 +32,4 @@ if __name__ == "__main__":
     if not args:
         parser.error("missing operand")
 
-    dirname(opts, args)
+    dirname(opts, map(PurePath, args))

@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 
-import os
 from optparse import OptionParser
+from pathlib import PurePath
 
 
-def basename(opts, names: list[str]):
-    for name in names:
+def basename(opts, paths: list[PurePath]):
+    for path in paths:
         print(
-            os.path.basename(name.removesuffix(opts.suffix)),
+            path.name.removesuffix(opts.suffix),
             end="\0" if opts.zero else "\n",
         )
 
@@ -52,4 +52,4 @@ if __name__ == "__main__":
     else:
         opts.suffix = ""
 
-    basename(opts, args)
+    basename(opts, map(PurePath, args))
