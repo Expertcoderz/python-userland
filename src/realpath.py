@@ -7,6 +7,25 @@ from optparse import OptionParser
 # Note: os.path is used instead of pathlib because certain functionality such as
 # os.path.normpath() lack a pathlib equivalent.
 
+def resolve_filename(opts, name: str) -> str:
+    if opts.symlink_mode:
+        if opts.symlink_mode == "L":
+            # resolve instances of ".." first
+            name = os.path.normpath(name)
+
+        name = os.path.realpath(name, strict=opts.can_mode == "e")
+
+        if not opts.can_mode:
+            # raise an error if directory missing
+            os.path.realpath(os.path.dirname(name), strict=True)
+    else:
+        if opts.can_mode == "e":
+            # raise an error if missing
+            os.path.realpath(name, strict=True)
+
+        name = os.path.abspath(name)
+
+    return name
 
 def realpath(opts, filenames: list[str]):
     endchar = "\0" if opts.zero else "\n"
@@ -18,22 +37,7 @@ def realpath(opts, filenames: list[str]):
 
     for name in filenames:
         try:
-            if not opts.symlink_mode:
-                if opts.can_mode == "e":
-                    # raise an error if missing
-                    os.path.realpath(name, strict=True)
-
-                name = os.path.abspath(name)
-            else:
-                if opts.symlink_mode == "L":
-                    # resolve instances of ".." first
-                    name = os.path.normpath(name)
-
-                name = os.path.realpath(name, strict=opts.can_mode == "e")
-
-                if not opts.can_mode:
-                    # raise an error if directory missing
-                    os.path.realpath(os.path.dirname(name), strict=True)
+            name = resolve_filename(opts, name)
         except OSError as e:
             failed = True
 
