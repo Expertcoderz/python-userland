@@ -27,7 +27,7 @@ def printenv(opts, var_names: list[str]):
 if __name__ == "__main__":
     parser = OptionParser(
         usage="Usage: %prog [OPTION] [VARIABLE]...",
-        description="Print VARIABLE(s) or all environment variables, and their corresponding values.",
+        description="Print VARIABLE(s) or all environment variables, and their values.",
         add_help_option=False,
     )
     parser.add_option("--help", action="help", help="show usage information and exit")
