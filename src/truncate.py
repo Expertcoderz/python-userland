@@ -85,10 +85,12 @@ if __name__ == "__main__":
     if opts.reference:
         opts.reference = Path(opts.reference)
 
+    size_prefix: int | None = None
+    size_num: int | None = None
+
     if opts.size:
-        size_prefix = opts.size[0]
-        if size_prefix not in frozenset("+-<>/%"):
-            size_prefix = None
+        if opts.size[0] in frozenset("+-<>/%"):
+            size_prefix = opts.size[0]
 
         try:
             size_num = int(opts.size[1:] if size_prefix else opts.size)
@@ -99,9 +101,6 @@ if __name__ == "__main__":
             parser.error("you must specify a relative '--size' with '--reference'")
     elif not opts.reference:
         parser.error("you must specify either '--size' or '--reference'")
-    else:
-        size_prefix = None
-        size_num = None
 
     if not args:
         parser.error("missing file operand")
