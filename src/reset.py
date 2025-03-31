@@ -11,7 +11,7 @@ from optparse import OptionParser
 def reset(opts, term: str | None = os.environ.get("TERM")):
     if opts.q:
         if not term:
-            print(f"unknown terminal type ", file=sys.stderr)
+            print("unknown terminal type ", file=sys.stderr)
             try:
                 while True:
                     if term := input("Terminal type? "):
