@@ -107,6 +107,9 @@ if __name__ == "__main__":
 
     opts, args = parser.parse_args()
 
+    if not args:
+        parser.error("missing operand")
+
     if opts.no_newline and len(args) > 1:
         print("ignoring --no-newline with multiple arguments", file=sys.stderr)
         opts.no_newline = False
