@@ -5,13 +5,13 @@ import sys
 from optparse import OptionParser
 
 
-def lazybox_sync(_, filenames: list[str]):
+def sync(_, filenames: list[str]):
     if filenames:
         failed = False
 
         for name in filenames:
             try:
-                with open(name, "r+") as io:
+                with open(name, "rb+") as io:
                     os.fsync(io)
             except OSError as e:
                 failed = True
@@ -31,4 +31,4 @@ if __name__ == "__main__":
     )
     parser.add_option("--help", action="help", help="show usage information and exit")
 
-    lazybox_sync(*parser.parse_args())
+    sync(*parser.parse_args())
