@@ -2,11 +2,10 @@
 python-userland
 ===============
 
-python-userland is a cross-platform implementation of various UNIX and Linux
-utilities, written purely in Python 3. It aims to eventually achieve feature
-parity with well-known projects such as GNU coreutils.
+python-userland is an experimental cross-platform implementation of various
+UNIX and Linux utilities, written purely in Python 3.
 
-Source files are located under the `src/`; for portability, each of them is a
+Source files are located under ``src/``; for portability, each of them is a
 standalone Python executable that relies only on a Python interpreter and
 standard library. No third-party libraries are (currently) used.
 
@@ -14,10 +13,14 @@ Note that this project is a work-in-progress. Not many utilities have been
 finished, and existing utilities may be limited in functionality, performance
 and correctness.
 
-Compatibility with Other Implementations
-========================================
+Utilities Featured
+==================
 
-Currently undecided.
+python-userland aims to implement as much as can be done in Python and its
+standard library, without relying on additional C bindings for system-specific
+functions. Currently, the focus is on achieving feature parity with `GNU
+Coreutils <https://www.gnu.org/software/coreutils/>`_, although not all
+utilities (e.g. ``clear``) are necessarily from the Coreutils project.
 
 Platform Support
 ================
