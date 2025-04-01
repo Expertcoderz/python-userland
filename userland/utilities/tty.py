@@ -3,9 +3,9 @@
 import os
 import sys
 
-from .. import lib
+from .. import core
 
-parser = lib.create_parser(
+parser = core.create_parser(
     usage=("%prog [OPTION]",),
     description="Print the path to the terminal connected to standard input.",
 )
@@ -19,7 +19,7 @@ parser.add_option(
 )
 
 
-@lib.command(parser)
+@core.command(parser)
 def python_userland_tty(opts, args):
     if args:
         parser.error(f"extra operand '{args[0]}'")

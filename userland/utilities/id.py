@@ -5,9 +5,9 @@ import pwd
 import os
 import sys
 
-from .. import lib
+from .. import core
 
-parser = lib.create_parser(
+parser = core.create_parser(
     usage=("%prog [OPTION]... [USER]...",),
     description="Print user and group information for each USER or the current user.",
 )
@@ -45,7 +45,7 @@ parser.add_option(
 parser.add_option("-Z", "--context", action="store_true", help="(unimplemented)")
 
 
-@lib.command(parser)
+@core.command(parser)
 def python_userland_id(opts, args):
     if opts.context:
         parser.error("--context (-Z) is not supported")

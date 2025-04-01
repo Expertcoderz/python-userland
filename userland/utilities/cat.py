@@ -5,7 +5,7 @@ import sys
 from io import BufferedReader
 from typing import BinaryIO, Generator
 
-from .. import lib
+from .. import core
 
 
 def squeeze_blank_lines(io: BinaryIO) -> Generator[bytes]:
@@ -96,7 +96,7 @@ def cat_io(opts, io: BinaryIO) -> None:
             sys.stdout.buffer.flush()
 
 
-parser = lib.create_parser(
+parser = core.create_parser(
     usage=("%prog [OPTION]... [FILE]...",),
     description="Concatenate each FILE to standard output.",
 )
@@ -135,7 +135,7 @@ parser.add_option(
 )
 
 
-@lib.command(parser)
+@core.command(parser)
 def python_userland_cat(opts, args):
     if opts.show_all:
         opts.show_ends = True
@@ -149,7 +149,7 @@ def python_userland_cat(opts, args):
         opts.show_nonprinting = True
 
     generators = [
-        lib.readlines_stdin_raw() if name == "-" else open(name, "rb")
+        core.readlines_stdin_raw() if name == "-" else open(name, "rb")
         for name in args or ["-"]
     ]
 

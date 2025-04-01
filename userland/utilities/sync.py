@@ -3,14 +3,14 @@
 import os
 import sys
 
-from .. import lib
+from .. import core
 
-parser = lib.create_parser(
+parser = core.create_parser(
     usage=("%prog [FILE]...",),
     description="Sync the filesystem or write each FILE's blocks to disk.",
 )
 
-@lib.command(parser)
+@core.command(parser)
 def python_userland_sync(_, args):
     if args:
         failed = False

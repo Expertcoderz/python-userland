@@ -2,7 +2,7 @@
 
 import sys
 
-from .. import lib
+from .. import core
 
 
 # BSD 16-bit checksum
@@ -27,7 +27,7 @@ def sum_sysv(data: bytes) -> int:
 
 SUM_ALGORITHMS = {"bsd": sum_bsd, "sysv": sum_sysv}
 
-parser = lib.create_parser(
+parser = core.create_parser(
     usage=("%prog [OPTION] [FILE]...",),
 )
 
@@ -48,7 +48,7 @@ parser.add_option(
 )
 
 
-@lib.command(parser)
+@core.command(parser)
 def python_userland_sum(opts, args):
     for name in args or ["-"]:
         if name == "-":

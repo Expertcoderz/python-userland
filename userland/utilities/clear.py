@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 
-from .. import lib
+from .. import core
 
 # clear(1), roughly modelled off the ncurses implementation.
 
 
-parser = lib.create_parser(
+parser = core.create_parser(
     usage=("%prog [OPTION]...",),
     description="Clear the terminal screen.",
 )
@@ -17,7 +17,7 @@ parser.add_option(
 )
 
 
-@lib.command(parser)
+@core.command(parser)
 def python_userland_clear(opts, args):
     if args:
         return 1

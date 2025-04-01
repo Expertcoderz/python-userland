@@ -3,7 +3,7 @@
 import os
 import sys
 
-from .. import lib
+from .. import core
 
 # Note: os.path is used instead of pathlib because certain functionality such as
 # os.path.normpath() lack a pathlib equivalent.
@@ -30,7 +30,7 @@ def resolve_filename(opts, name: str) -> str:
     return name
 
 
-parser = lib.create_parser(
+parser = core.create_parser(
     usage=("%prog [OPTION]... FILE...",),
     description="Print the resolved path of each FILE.",
 )
@@ -99,7 +99,7 @@ parser.add_option(
 )
 
 
-@lib.command(parser)
+@core.command(parser)
 def python_userland_realpath(opts, args):
     if not args:
         parser.error("missing operand")

@@ -4,7 +4,7 @@ import codecs
 import re
 from optparse import OptionParser, BadOptionError, AmbiguousOptionError
 
-from .. import lib
+from .. import core
 
 ESCAPES_PATTERN = re.compile(
     r"(\\0[0-7]{1,3}|\\x[0-9A-Za-z]{1,2}|\\[\\0abcefnrtv])",
@@ -35,7 +35,7 @@ class PassthroughOptionParser(OptionParser):
         rargs.clear()
 
 
-parser = lib.create_parser(
+parser = core.create_parser(
     usage=("%prog [OPTION]... [STRING]...",),
     description="Print STRING(s) to standard output.",
     parser_class=PassthroughOptionParser,
@@ -58,7 +58,7 @@ parser.add_option(
 )
 
 
-@lib.command(parser)
+@core.command(parser)
 def python_userland_echo(opts, args):
     string = " ".join(args)
 

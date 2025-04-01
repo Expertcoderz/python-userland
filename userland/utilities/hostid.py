@@ -1,15 +1,15 @@
 #!/usr/bin/python3
 
-from .. import lib
+from .. import core
 
-parser = lib.create_parser(
+parser = core.create_parser(
     usage=("%prog",),
     description="Print a 32-bit numeric host machine identifier.",
     epilog="This implementation gives an all-zero identifier.",
 )
 
 
-@lib.command(parser)
+@core.command(parser)
 def python_userland_hostid(_, args):
     if args:
         parser.error(f"extra operand '{args[0]}'")

@@ -2,9 +2,9 @@
 
 import os
 
-from .. import lib
+from .. import core
 
-parser = lib.create_parser(
+parser = core.create_parser(
     usage=(" %prog [OPTION] [VARIABLE]...",),
     description="Print VARIABLE(s) or all environment variables, and their values.",
 )
@@ -12,7 +12,7 @@ parser = lib.create_parser(
 parser.add_option("-0", "--null", action="store_true")
 
 
-@lib.command(parser)
+@core.command(parser)
 def python_userland_printenv(opts, var_names: list[str]):
     endchar = "\0" if opts.null else "\n"
 

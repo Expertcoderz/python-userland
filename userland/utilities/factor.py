@@ -4,7 +4,7 @@ import math
 import sys
 from typing import Generator, Iterable
 
-from .. import lib
+from .. import core
 
 # List of small primes greater than 2; used for lookup.
 SMALL_PRIMES = [3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]
@@ -101,7 +101,7 @@ def format_exponents(factors: Iterable[int]) -> str:
     return " ".join(processed)
 
 
-parser = lib.create_parser(
+parser = core.create_parser(
     usage=("%prog [OPTION] [NUMBER]...",),
     description="Compute and print the prime factors of each positive integer NUMBER.",
 )
@@ -109,12 +109,12 @@ parser = lib.create_parser(
 parser.add_option("-h", "--exponents", action="store_true")
 
 
-@lib.command(parser)
+@core.command(parser)
 def python_userland_factor(opts, args):
     failed = False
 
     try:
-        for arg in args or lib.readwords_stdin():
+        for arg in args or core.readwords_stdin():
             try:
                 num = int(arg)
                 if num < 0:

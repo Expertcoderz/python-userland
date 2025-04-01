@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 from typing import Callable
 
-from .. import lib
+from .. import core
 
 
 def readlink_function(can_mode: str | None) -> Callable[[Path], str]:
@@ -21,7 +21,7 @@ def readlink_function(can_mode: str | None) -> Callable[[Path], str]:
             return lambda path: path.resolve(strict=can_mode == "e")
 
 
-parser = lib.create_parser(
+parser = core.create_parser(
     usage=("%prog [OPTION]... FILE...",),
     description="Print the target of each symbolic link FILE.",
 )
@@ -83,7 +83,7 @@ parser.add_option(
 )
 
 
-@lib.command(parser)
+@core.command(parser)
 def python_userland_readlink(opts, args):
     if not args:
         parser.error("missing operand")

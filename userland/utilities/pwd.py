@@ -2,9 +2,9 @@
 
 import os
 
-from .. import lib
+from .. import core
 
-parser = lib.create_parser(
+parser = core.create_parser(
     usage=("%prog [OPTION]",),
     description="Print the path to the current working directory.",
 )
@@ -26,7 +26,7 @@ parser.add_option(
 )
 
 
-@lib.command(parser)
+@core.command(parser)
 def python_userland_pwd(opts, args):
     if args:
         parser.error("too many arguments")

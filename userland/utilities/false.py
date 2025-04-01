@@ -3,10 +3,10 @@
 import os
 import sys
 
-from .. import lib
+from .. import core
 
 
-@lib.command()
+@core.command()
 def python_userland_false(_, args):
     if args and args[0] == "--help":
         print(

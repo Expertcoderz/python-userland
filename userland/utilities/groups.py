@@ -5,15 +5,15 @@ import pwd
 import os
 import sys
 
-from .. import lib
+from .. import core
 
-parser = lib.create_parser(
+parser = core.create_parser(
     usage=("%prog [USERNAME]...",),
     description="Print a list of groups for each USERNAME or the current user.",
 )
 
 
-@lib.command(parser)
+@core.command(parser)
 def python_userland_groups(_, args):
     failed = False
 

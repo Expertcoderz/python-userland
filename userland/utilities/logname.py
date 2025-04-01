@@ -2,15 +2,15 @@
 
 import os
 
-from .. import lib
+from .. import core
 
-parser = lib.create_parser(
+parser = core.create_parser(
     usage=("%prog",),
     description="Print the current user's login name.",
 )
 
 
-@lib.command(parser)
+@core.command(parser)
 def python_userland_logname(_, args):
     if args:
         parser.error(f"extra operand '{args[0]}'")

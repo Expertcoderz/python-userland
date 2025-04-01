@@ -2,9 +2,9 @@
 
 from pathlib import PurePath
 
-from .. import lib
+from .. import core
 
-parser = lib.create_parser(
+parser = core.create_parser(
     usage=("%prog NAME [SUFFIX]", "%prog OPTION... NAME..."),
     description="Print the last component of each path NAME.",
 )
@@ -26,7 +26,7 @@ parser.add_option(
 )
 
 
-@lib.command(parser)
+@core.command(parser)
 def python_userland_basename(opts, args):
     if not args:
         parser.error("missing operand")

@@ -3,11 +3,11 @@
 import os
 import sys
 
-from .. import lib
+from .. import core
 
 # reset(1), roughly modelled off the ncurses implementation.
 
-parser = lib.create_parser(
+parser = core.create_parser(
     usage=("%prog [OPTION]... [IGNORED]...",),
     description="Initialize or reset the terminal state.",
 )
@@ -39,7 +39,7 @@ parser.add_option("-k", metavar="CHAR", help="(unimplemented)")
 parser.add_option("-m", metavar="MAPPING", help="(unimplemented)")
 
 
-@lib.command(parser)
+@core.command(parser)
 def python_userland_reset(opts, args):
     if args and args[0] == "-":
         opts.q = True

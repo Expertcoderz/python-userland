@@ -2,12 +2,12 @@
 
 import os
 
-from .. import lib
+from .. import core
 
 UNAME_ATTRS = frozenset("mnrsv")
 
 
-parser = lib.create_parser(
+parser = core.create_parser(
     usage=("%prog [OPTION]...",),
     description="Print system information.",
 )
@@ -68,7 +68,7 @@ parser.add_option(
 )
 
 
-@lib.command(parser)
+@core.command(parser)
 def python_userland_uname(opts, args):
     if args:
         parser.error(f"extra operand '{args[0]}'")

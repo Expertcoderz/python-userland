@@ -4,9 +4,9 @@ import sys
 from pathlib import Path
 from typing import Callable
 
-from .. import lib
+from .. import core
 
-parser = lib.create_parser(
+parser = core.create_parser(
     usage=(
         "%prog [OPTION]... -s SIZE FILE...",
         "%prog [OPTION]... -r RFILE FILE...",
@@ -26,7 +26,7 @@ parser.add_option(
 parser.add_option("-r", "--reference", metavar="RFILE", help="base size on RFILE")
 
 
-@lib.command(parser)
+@core.command(parser)
 def python_userland_truncate(opts, args):
     if opts.reference:
         opts.reference = Path(opts.reference)

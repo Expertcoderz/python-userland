@@ -3,11 +3,11 @@
 import time
 from decimal import Decimal
 
-from .. import lib
+from .. import core
 
 SUFFIXES = {"s": 1, "m": 60, "h": 60 * 60, "d": 24 * 60 * 60}
 
-parser = lib.create_parser(
+parser = core.create_parser(
     usage=("%prog DURATION[SUFFIX]...",),
     description=(
         "Delay for the sum of each DURATION."
@@ -16,7 +16,7 @@ parser = lib.create_parser(
 )
 
 
-@lib.command(parser)
+@core.command(parser)
 def python_userland_sleep(_, args):
     total_secs = Decimal()
 
