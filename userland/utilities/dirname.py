@@ -11,7 +11,6 @@ parser = core.create_parser(
         " or '.' if NAME is the only component."
     ),
 )
-parser.add_option("--help", action="help", help="show usage information and exit")
 
 parser.add_option(
     "-z",
