@@ -5,10 +5,6 @@ python-userland
 python-userland is an experimental cross-platform implementation of various
 UNIX and Linux utilities, written purely in Python 3.
 
-Source files are located under ``src/``; for portability, each of them is a
-standalone Python executable that relies only on a Python interpreter and
-standard library. No third-party libraries are (currently) used.
-
 Note that this project is a work-in-progress. Not many utilities have been
 finished, and existing utilities may be limited in functionality, performance
 and correctness.

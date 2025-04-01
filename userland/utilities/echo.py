@@ -4,6 +4,8 @@ import codecs
 import re
 from optparse import OptionParser, BadOptionError, AmbiguousOptionError
 
+from .. import lib
+
 ESCAPES_PATTERN = re.compile(
     r"(\\0[0-7]{1,3}|\\x[0-9A-Za-z]{1,2}|\\[\\0abcefnrtv])",
     re.UNICODE | re.VERBOSE,
@@ -33,7 +35,31 @@ class PassthroughOptionParser(OptionParser):
         rargs.clear()
 
 
-def echo(opts, args):
+parser = lib.create_parser(
+    usage=("%prog [OPTION]... [STRING]...",),
+    description="Print STRING(s) to standard output.",
+    parser_class=PassthroughOptionParser,
+)
+parser.disable_interspersed_args()
+
+parser.add_option("-n", action="store_true", help="do not output the trailing newline")
+parser.add_option(
+    "-e",
+    dest="escapes",
+    action="store_true",
+    help="enable interpretation of backslash escapes",
+)
+parser.add_option(
+    "-E",
+    dest="escapes",
+    action="store_false",
+    default=False,
+    help="disable interpretation of backslash escapes (default)",
+)
+
+
+@lib.command(parser)
+def python_userland_echo(opts, args):
     string = " ".join(args)
 
     if opts.escapes:
@@ -53,31 +79,4 @@ def echo(opts, args):
 
     print(string, end="" if opts.n else "\n")
 
-
-if __name__ == "__main__":
-    parser = PassthroughOptionParser(
-        usage="Usage: %prog [OPTION]... [STRING]...",
-        description="Print STRING(s) to standard output.",
-        add_help_option=False,
-    )
-    parser.disable_interspersed_args()
-    parser.add_option("--help", action="help", help="show usage information and exit")
-
-    parser.add_option(
-        "-n", action="store_true", help="do not output the trailing newline"
-    )
-    parser.add_option(
-        "-e",
-        dest="escapes",
-        action="store_true",
-        help="enable interpretation of backslash escapes",
-    )
-    parser.add_option(
-        "-E",
-        dest="escapes",
-        action="store_false",
-        default=False,
-        help="disable interpretation of backslash escapes (default)",
-    )
-
-    echo(*parser.parse_args())
+    return 0

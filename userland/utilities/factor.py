@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 
 import math
-import sys
-from optparse import OptionParser
 from typing import Generator, Iterable
+
+from .. import lib
 
 # List of small primes greater than 2; used for lookup.
 SMALL_PRIMES = [3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]
@@ -100,7 +100,27 @@ def format_exponents(factors: Iterable[int]) -> str:
     return " ".join(processed)
 
 
-def factor(opts, numbers: list[int]):
+parser = lib.create_parser(
+    usage=("%prog [OPTION] [NUMBER]...",),
+    description="Compute and print the prime factors of each positive integer NUMBER.",
+)
+
+parser.add_option("-h", "--exponents", action="store_true")
+
+@lib.command(parser)
+def python_userland_factor(opts, args):
+    numbers: list[int] = []
+
+    for arg in args:
+        try:
+            num = int(arg)
+            if num < 0:
+                raise ValueError
+        except ValueError:
+            parser.error(f"'{arg}' is not a valid positive integer")
+
+        numbers.append(num)
+
     try:
         for n in numbers:
             if n < 2:
@@ -115,29 +135,6 @@ def factor(opts, numbers: list[int]):
             )
     except KeyboardInterrupt:
         print()
-        sys.exit(130)
+        return 130
 
-
-if __name__ == "__main__":
-    parser = OptionParser(
-        usage="Usage: %prog [OPTION] [NUMBER]...", add_help_option=False
-    )
-    parser.add_option("--help", action="help", help="show usage information and exit")
-
-    parser.add_option("-h", "--exponents", action="store_true")
-
-    opts, args = parser.parse_args()
-
-    numbers: list[int] = []
-
-    for arg in args:
-        try:
-            num = int(arg)
-            if num < 0:
-                raise ValueError
-        except ValueError:
-            parser.error(f"'{arg}' is not a valid positive integer")
-
-        numbers.append(num)
-
-    factor(opts, numbers)
+    return 0

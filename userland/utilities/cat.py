@@ -3,8 +3,9 @@
 import itertools
 import sys
 from io import BufferedReader
-from optparse import OptionParser
 from typing import BinaryIO, Generator
+
+from .. import lib
 
 
 def squeeze_blank_lines(io: BinaryIO) -> Generator[bytes]:
@@ -95,81 +96,47 @@ def cat_io(opts, io: BinaryIO) -> None:
             sys.stdout.buffer.flush()
 
 
-def readlines_stdin() -> Generator[bytes]:
-    while True:
-        if line := sys.stdin.buffer.readline():
-            yield line
-        else:
-            # EOF (Ctrl-D)
-            break
+parser = lib.create_parser(
+    usage=("%prog [OPTION]... [FILE]...",),
+    description="Concatenate each FILE to standard output.",
+)
+
+parser.add_option(
+    "-E", "--show-ends", action="store_true", help="append '$' to each LF"
+)
+parser.add_option("-T", "--show-tabs", action="store_true", help="convert TABs to '^I'")
+parser.add_option(
+    "-v",
+    "--show-nonprinting",
+    action="store_true",
+    help="show nonprinting characters except LF and TAB with ^ and M- notation",
+)
+parser.add_option("-A", "--show-all", action="store_true", help="equivalent to -vET")
+parser.add_option("-e", action="store_true", help="equivalent to -vE")
+parser.add_option("-t", action="store_true", help="equivalent to -vT")
+
+parser.add_option("-n", "--number", action="store_true", help="number each output line")
+parser.add_option(
+    "-b",
+    "--number-nonblank",
+    action="store_true",
+    help="number each nonempty output line (overrides -n)",
+)
+
+parser.add_option(
+    "-s",
+    "--squeeze-blank",
+    action="store_true",
+    help="collapse repeated empty output lines",
+)
+
+parser.add_option(
+    "-u", action="store_true", help="(ignored; present for POSIX compatibility)"
+)
 
 
-def cat(opts, filenames: list[str]):
-    generators = [
-        readlines_stdin() if name == "-" else open(name, "rb") for name in filenames
-    ]
-
-    try:
-        cat_io(opts, itertools.chain(*generators))
-    except KeyboardInterrupt:
-        print()
-        sys.exit(130)
-    finally:
-        for gen in generators:
-            # Close opened files other than stdin.
-            if isinstance(gen, BufferedReader):
-                gen.close()
-
-
-if __name__ == "__main__":
-    parser = OptionParser(
-        usage="Usage: %prog [OPTION]... [FILE]...",
-        description="Concatenate each FILE to standard output.",
-        add_help_option=False,
-    )
-    parser.add_option("--help", action="help", help="show usage information and exit")
-
-    parser.add_option(
-        "-E", "--show-ends", action="store_true", help="append '$' to each LF"
-    )
-    parser.add_option(
-        "-T", "--show-tabs", action="store_true", help="convert TABs to '^I'"
-    )
-    parser.add_option(
-        "-v",
-        "--show-nonprinting",
-        action="store_true",
-        help="show nonprinting characters except LF and TAB with ^ and M- notation",
-    )
-    parser.add_option(
-        "-A", "--show-all", action="store_true", help="equivalent to -vET"
-    )
-    parser.add_option("-e", action="store_true", help="equivalent to -vE")
-    parser.add_option("-t", action="store_true", help="equivalent to -vT")
-
-    parser.add_option(
-        "-n", "--number", action="store_true", help="number each output line"
-    )
-    parser.add_option(
-        "-b",
-        "--number-nonblank",
-        action="store_true",
-        help="number each nonempty output line (overrides -n)",
-    )
-
-    parser.add_option(
-        "-s",
-        "--squeeze-blank",
-        action="store_true",
-        help="collapse repeated empty output lines",
-    )
-
-    parser.add_option(
-        "-u", action="store_true", help="(ignored; present for POSIX compatibility)"
-    )
-
-    opts, args = parser.parse_args()
-
+@lib.command(parser)
+def python_userland_cat(opts, args):
     if opts.show_all:
         opts.show_ends = True
         opts.show_tabs = True
@@ -181,4 +148,20 @@ if __name__ == "__main__":
         opts.show_tabs = True
         opts.show_nonprinting = True
 
-    cat(opts, args or ["-"])
+    generators = [
+        lib.readlines_stdin_raw() if name == "-" else open(name, "rb")
+        for name in args or ["-"]
+    ]
+
+    try:
+        cat_io(opts, itertools.chain(*generators))
+    except KeyboardInterrupt:
+        print()
+        return 130
+    finally:
+        for gen in generators:
+            # Close opened files other than stdin.
+            if isinstance(gen, BufferedReader):
+                gen.close()
+
+    return 0
