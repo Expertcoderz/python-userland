@@ -4,7 +4,14 @@ import os
 
 from .. import core
 
-UNAME_ATTRS = frozenset("mnrsv")
+# mapping of uname_result attribute name to option atttribute name
+UNAME_ATTRS = {
+    "sysname": "kernel_name",
+    "nodename": "nodename",
+    "release": "kernel_release",
+    "version": "kernel_version",
+    "machine": "machine",
+}
 
 
 parser = core.create_parser(
@@ -75,21 +82,23 @@ def python_userland_uname(opts, args):
 
     extras: list[str] = []
 
-    if opts.a:
-        for attr in UNAME_ATTRS:
-            setattr(opts, attr, True)
+    if opts.all:
+        for optname in UNAME_ATTRS.values():
+            setattr(opts, optname, True)
     else:
-        if opts.p:
+        if opts.processor:
             extras.append("unknown")
 
-        if opts.i:
+        if opts.hardware_platform:
             extras.append("unknown")
 
-        if opts.o:
+        if opts.operating_system:
             extras.append("unknown")
 
-    if not extras and not any({getattr(opts, attr) for attr in UNAME_ATTRS}):
-        opts.s = True
+    if not extras and not any(
+        {getattr(opts, optname) for optname in UNAME_ATTRS.values()}
+    ):
+        opts.kernel_name = True
 
     uname = os.uname()
 
@@ -104,7 +113,7 @@ def python_userland_uname(opts, args):
                     "version",
                     "machine",
                 ]
-                if getattr(opts, attribute[0])
+                if getattr(opts, UNAME_ATTRS[attribute])
             ]
             + extras
         )
