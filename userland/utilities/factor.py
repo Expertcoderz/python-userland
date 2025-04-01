@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import math
+import sys
 from typing import Generator, Iterable
 
 from .. import lib
@@ -107,34 +108,34 @@ parser = lib.create_parser(
 
 parser.add_option("-h", "--exponents", action="store_true")
 
+
 @lib.command(parser)
 def python_userland_factor(opts, args):
-    numbers: list[int] = []
-
-    for arg in args:
-        try:
-            num = int(arg)
-            if num < 0:
-                raise ValueError
-        except ValueError:
-            parser.error(f"'{arg}' is not a valid positive integer")
-
-        numbers.append(num)
+    failed = False
 
     try:
-        for n in numbers:
-            if n < 2:
-                print(f"{n}:")
+        for arg in args or lib.readwords_stdin():
+            try:
+                num = int(arg)
+                if num < 0:
+                    raise ValueError
+            except ValueError:
+                failed = True
+                print(f"'{arg}' is not a valid positive integer", file=sys.stderr)
                 continue
 
-            factors = sorted(factorize(n))
+            if num < 2:
+                print(f"{num}:")
+                continue
+
+            factors = sorted(factorize(num))
 
             print(
-                f"{n}: {format_exponents(factors) if opts.exponents
+                f"{num}: {format_exponents(factors) if opts.exponents
                 else " ".join(map(str, factors))}"
             )
     except KeyboardInterrupt:
         print()
         return 130
 
-    return 0
+    return int(failed)
