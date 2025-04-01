@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 from pathlib import PurePath
 
 from .. import core

@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 import codecs
 import re
 from optparse import OptionParser, BadOptionError, AmbiguousOptionError

@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 from .. import core
 
 # clear(1), roughly modelled off the ncurses implementation.

@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 from .. import core
 
 parser = core.create_parser(

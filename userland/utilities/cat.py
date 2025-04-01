@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 import itertools
 import sys
 from io import BufferedReader

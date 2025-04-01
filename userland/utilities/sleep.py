@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 import time
 from decimal import Decimal
 
