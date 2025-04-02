@@ -8,8 +8,6 @@ parser = core.create_parser(
     description="Clear the terminal screen.",
 )
 
-parser.add_option("-T", metavar="TERM", help="(unimplemented)")
-
 parser.add_option(
     "-x", action="store_true", help="do not try to clear the scrollback buffer"
 )
@@ -21,6 +19,7 @@ def python_userland_clear(opts, args):
         return 1
 
     print("\x1b[2J\x1b[H", end="")
+
     if not opts.x:
         print("\x1b[3J", end="")
 

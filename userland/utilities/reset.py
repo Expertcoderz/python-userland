@@ -11,10 +11,6 @@ parser = core.create_parser(
     description="Initialize or reset the terminal state.",
 )
 
-parser.add_option("-I", action="store_true", help="(unimplemented)")
-parser.add_option("-c", action="store_true", help="(unimplemented)")
-parser.add_option("-Q", action="store_true", help="(unimplemented)")
-
 parser.add_option(
     "-q",
     action="store_true",
@@ -28,14 +24,6 @@ parser.add_option(
     action="store_true",
     help="print the sequence of shell commands to initialize the TERM environment variable",
 )
-
-parser.add_option("-w", action="store_true", help="(unimplemented)")
-
-parser.add_option("-e", metavar="CHAR", help="(unimplemented)")
-parser.add_option("-i", metavar="CHAR", help="(unimplemented)")
-parser.add_option("-k", metavar="CHAR", help="(unimplemented)")
-
-parser.add_option("-m", metavar="MAPPING", help="(unimplemented)")
 
 
 @core.command(parser)
