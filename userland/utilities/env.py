@@ -7,6 +7,7 @@ from .. import core
 
 parser = core.create_parser(
     usage=("%prog [OPTION]... [-] [NAME=VALUE]... [COMMAND [ARG]...]",),
+    description="Run a program in a modified environment or print environment variables.",
 )
 parser.disable_interspersed_args()
 
