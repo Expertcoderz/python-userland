@@ -3,6 +3,7 @@ import sys
 
 from .. import core
 
+
 # reset(1), roughly modelled off the ncurses implementation.
 
 parser = core.create_parser(

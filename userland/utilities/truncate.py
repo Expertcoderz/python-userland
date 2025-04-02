@@ -4,6 +4,7 @@ from typing import Callable
 
 from .. import core
 
+
 parser = core.create_parser(
     usage=(
         "%prog [OPTION]... -s SIZE FILE...",

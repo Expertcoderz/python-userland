@@ -3,6 +3,7 @@ import sys
 
 from .. import core
 
+
 # Note: os.path is used instead of pathlib because certain functionality such as
 # os.path.normpath() lack a pathlib equivalent.
 

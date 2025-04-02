@@ -1,5 +1,6 @@
 from .. import core
 
+
 parser = core.create_parser(
     usage=("%prog",),
     description="Politely refuse a login.",

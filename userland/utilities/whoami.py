@@ -2,6 +2,7 @@ import os
 
 from .. import core
 
+
 parser = core.create_parser(
     usage=("%prog",),
     description="Print the current username. Same as `id -un`.",

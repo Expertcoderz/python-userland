@@ -4,6 +4,7 @@ from optparse import OptionParser, BadOptionError, AmbiguousOptionError
 
 from .. import core
 
+
 ESCAPES_PATTERN = re.compile(
     r"(\\0[0-7]{1,3}|\\x[0-9A-Za-z]{1,2}|\\[\\0abcefnrtv])",
     re.UNICODE | re.VERBOSE,

@@ -5,6 +5,7 @@ import sys
 
 from .. import core
 
+
 parser = core.create_parser(
     usage=("%prog [USERNAME]...",),
     description="Print a list of groups for each USERNAME or the current user.",

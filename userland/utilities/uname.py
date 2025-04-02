@@ -2,6 +2,7 @@ import os
 
 from .. import core
 
+
 # mapping of uname_result attribute name to option atttribute name
 UNAME_ATTRS = {
     "sysname": "kernel_name",

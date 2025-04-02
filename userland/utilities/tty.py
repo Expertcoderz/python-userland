@@ -3,6 +3,7 @@ import sys
 
 from .. import core
 
+
 parser = core.create_parser(
     usage=("%prog [OPTION]",),
     description="Print the path to the terminal connected to standard input.",

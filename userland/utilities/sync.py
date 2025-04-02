@@ -3,10 +3,12 @@ import sys
 
 from .. import core
 
+
 parser = core.create_parser(
     usage=("%prog [FILE]...",),
     description="Sync the filesystem or write each FILE's blocks to disk.",
 )
+
 
 @core.command(parser)
 def python_userland_sync(_, args):

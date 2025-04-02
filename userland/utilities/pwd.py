@@ -2,6 +2,7 @@ import os
 
 from .. import core
 
+
 parser = core.create_parser(
     usage=("%prog [OPTION]",),
     description="Print the path to the current working directory.",

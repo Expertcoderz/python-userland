@@ -1,5 +1,6 @@
 from .. import core
 
+
 parser = core.create_parser(
     usage=("%prog",),
     description="Print a 32-bit numeric host machine identifier.",

@@ -3,7 +3,9 @@ from decimal import Decimal
 
 from .. import core
 
+
 SUFFIXES = {"s": 1, "m": 60, "h": 60 * 60, "d": 24 * 60 * 60}
+
 
 parser = core.create_parser(
     usage=("%prog DURATION[SUFFIX]...",),

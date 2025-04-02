@@ -1,7 +1,7 @@
 from .. import core
 
-# clear(1), roughly modelled off the ncurses implementation.
 
+# clear(1), roughly modelled off the ncurses implementation.
 
 parser = core.create_parser(
     usage=("%prog [OPTION]...",),

@@ -2,6 +2,7 @@ from pathlib import PurePath
 
 from .. import core
 
+
 parser = core.create_parser(
     usage=("%prog [OPTION]... NAME...",),
     description=(
