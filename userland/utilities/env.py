@@ -81,7 +81,7 @@ def python_userland_env(opts, args):
     if not prog_args:
         for name, value in env.items():
             print(f"{name}={value}", end="\0" if opts.null else "\n")
-        return
+        return 0
 
     if opts.chdir:
         try:
@@ -97,3 +97,5 @@ def python_userland_env(opts, args):
     except OSError as e:
         print(e, file=sys.stderr)
         return 126 if isinstance(e, FileNotFoundError) else 127
+
+    return 0
