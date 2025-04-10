@@ -2,6 +2,8 @@ import sys
 from pathlib import Path
 from typing import Callable
 
+from tqdm import tqdm
+
 from .. import core
 
 
@@ -11,6 +13,20 @@ parser = core.create_parser(
         "%prog [OPTION]... -r RFILE FILE...",
     ),
     description="Shrink or extend each FILE to SIZE.",
+)
+
+parser.add_option(
+    "--progress",
+    dest="progress",
+    action="store_true",
+    help="show a progress bar when truncating files",
+)
+parser.add_option(
+    "--no-progress",
+    dest="progress",
+    action="store_false",
+    default=False,
+    help="do not show a progress bar (default)",
 )
 
 parser.add_option("-c", "--no-create", action="store_true", help="do not create files")
@@ -79,7 +95,9 @@ def python_userland_truncate(opts, args):
         print(e, file=sys.stderr)
         return 1
 
-    for file in map(Path, args):
+    for file in map(
+        Path, tqdm(args, ascii=True, desc="Truncating files") if opts.progress else args
+    ):
         if not file.exists() and opts.no_create:
             continue
 
