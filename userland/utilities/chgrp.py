@@ -188,8 +188,8 @@ def python_userland_chgrp(opts, args):
         # this point because even if they are the same, an error should be
         # printed if the current user has insufficient permission to change
         # the group membership of that file (for coreutils compat).
-        if (from_uid is not None and prev_uid == from_uid) or (
-            from_gid is not None and prev_gid == from_gid
+        if (from_uid is not None and prev_uid != from_uid) or (
+            from_gid is not None and prev_gid != from_gid
         ):
             if opts.verbosity > 2:
                 print(f"group of '{file}' retained as {prev_gname}")
