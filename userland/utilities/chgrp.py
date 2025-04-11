@@ -135,19 +135,7 @@ def python_userland_chgrp(opts, args):
     from_gid: int | None = None
 
     if opts.from_spec:
-        from_spec = opts.from_spec.split(":")
-
-        if from_spec[0]:
-            try:
-                from_uid = pwd.getpwnam(from_spec[0])
-            except KeyError:
-                parser.error(f"invalid user: '{opts.from_spec}'")
-
-        if len(from_spec) > 1 and from_spec[1]:
-            try:
-                from_gid = grp.getgrnam(from_spec[1])
-            except KeyError:
-                parser.error(f"invalid group: '{opts.from_spec}'")
+        from_uid, from_gid = core.parse_onwer_spec(parser, opts.from_spec)
 
     gid: int
     gname: str | None = None
