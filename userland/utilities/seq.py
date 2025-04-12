@@ -1,5 +1,4 @@
 import math
-import sys
 from decimal import Decimal, InvalidOperation
 
 from .. import core
@@ -45,12 +44,9 @@ def python_userland_seq(opts, args):
 
     def arg_to_decimal(arg: str) -> Decimal:
         try:
-            return Decimal(
-                arg,
-            )
+            return Decimal(arg)
         except InvalidOperation:
-            print(f"invalid decimal argument: {arg}", file=sys.stderr)
-            sys.exit(1)
+            parser.error(f"invalid decimal argument: {arg}")
 
     if len(args) == 1:
         first = Decimal(1)
