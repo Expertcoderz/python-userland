@@ -88,7 +88,7 @@ parser.add_option(
 parser.add_option(
     "--from",
     dest="from_spec",  # prevent name collision with the `from` keyword
-    metavar="[CURRENT_OWNER][:CURRENT_GROUP]",
+    metavar="[CURRENT_OWNER][:[CURRENT_GROUP]]",
     help="only affect files with CURRENT_OWNER and CURRENT_GROUP"
     " (either is optional and only checked if given)",
 )
@@ -226,16 +226,6 @@ def python_userland_chgrp(opts, args):
     if opts.recursive:
 
         def traverse(file: Path) -> None:
-            nonlocal failed
-
-            if opts.preserve_root and file.root == str(file):
-                print(
-                    f"recursive operation on '{file}' prevented; use --no-preserve-root to override",
-                    file=sys.stderr,
-                )
-                failed = True
-                return
-
             for child in file.iterdir():
                 if child.is_dir(follow_symlinks=opts.recurse_mode == "L"):
                     traverse(child)
@@ -245,6 +235,15 @@ def python_userland_chgrp(opts, args):
             if file.is_dir(
                 follow_symlinks=opts.recurse_mode == "H" or opts.recurse_mode == "L"
             ):
+                if opts.preserve_root and file.root == str(file):
+                    failed = True
+                    print(
+                        f"recursive operation on '{file}' prevented;"
+                        " use --no-preserve-root to override",
+                        file=sys.stderr,
+                    )
+                    continue
+
                 traverse(file)
             else:
                 chown(file)
