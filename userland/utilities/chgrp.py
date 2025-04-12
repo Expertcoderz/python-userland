@@ -1,5 +1,3 @@
-import grp
-import pwd
 import shutil
 import sys
 from pathlib import Path
@@ -152,18 +150,22 @@ def python_userland_chgrp(opts, args):
         if not args:
             parser.error(f"missing operand after '{gname}'")
 
-        if gname.isdecimal():
-            gid = int(gname)
-        else:
-            try:
-                gid = grp.getgrnam(gname).gr_gid
-            except KeyError:
-                parser.error(f"invalid group: '{gname}'")
+        gid = core.parse_group(parser, gname)
 
     failed = False
 
-    def chown(file: Path) -> None:
-        nonlocal failed
+    for file in core.traverse_files(
+        (
+            tqdm(args, ascii=True, desc="Changing group ownership")
+            if opts.progress
+            else args
+        ),
+        recurse_mode=opts.recurse_mode if opts.recursive else None,
+        preserve_root=opts.preserve_root,
+    ):
+        if not file:
+            failed = True
+            continue
 
         try:
             stat = file.stat(follow_symlinks=opts.dereference)
@@ -177,12 +179,9 @@ def python_userland_chgrp(opts, args):
                     f"failed to change group of '{file}' to {gname or gid}",
                     file=sys.stderr,
                 )
-            return
+            continue
 
-        try:
-            prev_gname = grp.getgrgid(prev_gid).gr_name
-        except KeyError:
-            prev_gname = str(prev_gid)
+        prev_gname = core.group_display_name_from_id(prev_gid)
 
         # Note: while it's possible, we do not check if prev_gid == gid at
         # this point because even if they are the same, an error should be
@@ -193,7 +192,7 @@ def python_userland_chgrp(opts, args):
         ):
             if opts.verbosity > 2:
                 print(f"group of '{file}' retained as {prev_gname}")
-            return
+            continue
 
         try:
             shutil.chown(file, group=gid, follow_symlinks=opts.dereference)
@@ -206,49 +205,12 @@ def python_userland_chgrp(opts, args):
                         f"failed to change group of '{file}' to {gname or gid}",
                         file=sys.stderr,
                     )
-            return
+            continue
 
         if prev_gid == gid:
             if opts.verbosity > 2:
                 print(f"group of '{file}' retained as {prev_gname}")
         elif opts.verbosity > 1:
             print(f"changed group of '{file}' from {prev_gname} to {gname or gid}")
-
-    files = map(
-        Path,
-        (
-            tqdm(args, ascii=True, desc="Changing group ownership")
-            if opts.progress
-            else args
-        ),
-    )
-
-    if opts.recursive:
-
-        def traverse(file: Path) -> None:
-            for child in file.iterdir():
-                if child.is_dir(follow_symlinks=opts.recurse_mode == "L"):
-                    traverse(child)
-                chown(file)
-
-        for file in files:
-            if file.is_dir(
-                follow_symlinks=opts.recurse_mode == "H" or opts.recurse_mode == "L"
-            ):
-                if opts.preserve_root and file.root == str(file):
-                    failed = True
-                    print(
-                        f"recursive operation on '{file}' prevented;"
-                        " use --no-preserve-root to override",
-                        file=sys.stderr,
-                    )
-                    continue
-
-                traverse(file)
-            else:
-                chown(file)
-    else:
-        for file in files:
-            chown(file)
 
     return int(failed)

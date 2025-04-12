@@ -1,3 +1,4 @@
+import functools
 import grp
 import pwd
 
@@ -8,7 +9,7 @@ def parse_onwer_spec(
     parser: OptionParser, owner_spec: str
 ) -> tuple[int | None, int | None]:
     """
-    Process a string in the form ``[USER][:GROUP]`` and return the UID and GID.
+    Accept a string in the form ``[USER][:[GROUP]]`` and return the UID and GID.
     Either or both may be None if omitted from the input string.
     An appropriate parser error is thrown if obtaining the UID or GID fails.
     """
@@ -18,21 +19,55 @@ def parse_onwer_spec(
     gid: int | None = None
 
     if tokens[0]:
-        if tokens[0].isdecimal():
-            uid = int(tokens[0])
-        else:
-            try:
-                uid = pwd.getpwnam(tokens[0])
-            except KeyError:
-                parser.error(f"invalid user: '{tokens}'")
+        uid = parse_user(parser, tokens[0])
 
     if len(tokens) > 1 and tokens[1]:
-        if tokens[1].isdecimal():
-            gid = int(tokens[1])
-        else:
-            try:
-                gid = grp.getgrnam(tokens[1])
-            except KeyError:
-                parser.error(f"invalid group: '{tokens}'")
+        gid = parse_group(parser, tokens[1])
 
     return uid, gid
+
+
+@functools.lru_cache(1000)
+def parse_user(parser: OptionParser, user: str) -> int:
+    """
+    Accept a string representing a username or UID and return the UID.
+    An appropriate parser error is thrown if obtaining the UID fails.
+    """
+    if user.isdecimal():
+        return int(user)
+
+    try:
+        return pwd.getpwnam(user).pw_uid
+    except KeyError:
+        parser.error(f"invalid user: {user}")
+
+
+@functools.lru_cache(1000)
+def parse_group(parser: OptionParser, group: str) -> int:
+    """
+    Accept a string representing a group name or GID and return the GID.
+    An appropriate parser error is thrown if obtaining the GID fails.
+    """
+    if group.isdecimal():
+        return int(group)
+
+    try:
+        return grp.getgrnam(group).gr_gid
+    except KeyError:
+        parser.error(f"invalid group: {group}")
+
+
+@functools.lru_cache(1000)
+def user_display_name_from_id(uid: int) -> str:
+    try:
+        return pwd.getpwuid(uid).pw_name
+    except KeyError:
+        return str(uid)
+
+
+@functools.lru_cache(1000)
+def group_display_name_from_id(gid: int) -> str:
+    try:
+        return grp.getgrgid(gid).gr_name
+    except KeyError:
+        return str(gid)
