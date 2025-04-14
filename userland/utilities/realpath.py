@@ -1,5 +1,4 @@
 import os
-import sys
 
 from .. import core
 
@@ -116,7 +115,7 @@ def python_userland_realpath(opts, args):
             failed = True
 
             if not opts.quiet:
-                print(e, file=sys.stderr)
+                core.perror(e)
         else:
             if opts.relative_to and not opts.relative_base:
                 name = os.path.relpath(name, opts.relative_to)

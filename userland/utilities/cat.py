@@ -146,10 +146,18 @@ def python_userland_cat(opts, args):
         opts.show_tabs = True
         opts.show_nonprinting = True
 
-    generators = [
-        core.readlines_stdin_raw() if name == "-" else open(name, "rb")
-        for name in args or ["-"]
-    ]
+    generators: list[Generator[bytes]] = []
+    failed = False
+
+    for name in args or ["-"]:
+        if name == "-":
+            generators.append(core.readlines_stdin_raw())
+        else:
+            io = core.safe_open(name, "rb")
+            if io:
+                generators.append(io)
+            else:
+                failed = True
 
     try:
         cat_io(opts, itertools.chain(*generators))
@@ -162,4 +170,4 @@ def python_userland_cat(opts, args):
             if isinstance(gen, BufferedReader):
                 gen.close()
 
-    return 0
+    return int(failed)

@@ -141,7 +141,7 @@ def python_userland_chgrp(opts, args):
         try:
             gid = Path(opts.reference).stat(follow_symlinks=True).st_gid
         except OSError as e:
-            print(e, file=sys.stderr)
+            core.perror(e)
             return 1
     else:
         parser.expect_nargs(args, (2,))
@@ -171,11 +171,12 @@ def python_userland_chgrp(opts, args):
         except OSError as e:
             failed = True
             if opts.verbosity:
-                print(e, file=sys.stderr)
-                print(
-                    f"failed to change group of '{file}' to {gname or gid}",
-                    file=sys.stderr,
-                )
+                core.perror(e)
+                if opts.verbosity > 2:
+                    print(
+                        f"failed to change group of '{file}' to {gname or gid}",
+                        file=sys.stderr,
+                    )
             continue
 
         prev_gname = core.group_display_name_from_id(prev_gid)
@@ -196,8 +197,8 @@ def python_userland_chgrp(opts, args):
         except OSError as e:
             failed = True
             if opts.verbosity:
-                print(e, file=sys.stderr)
-                if opts.verbosity:
+                core.perror(e)
+                if opts.verbosity > 2:
                     print(
                         f"failed to change group of '{file}' to {gname or gid}",
                         file=sys.stderr,

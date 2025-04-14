@@ -141,7 +141,7 @@ def python_userland_chown(opts, args):
         try:
             ref_stat = Path(opts.reference).stat(follow_symlinks=True)
         except OSError as e:
-            print(e, file=sys.stderr)
+            core.perror(e)
             return 1
 
         chown_args["user"] = ref_stat.st_uid
@@ -154,14 +154,10 @@ def python_userland_chown(opts, args):
             parser.error(f"invalid owner spec: {owner_spec}")
 
         chown_args["user"] = (
-            parser.parse_user(owner_match.group(1))
-            if owner_match.group(1)
-            else None
+            parser.parse_user(owner_match.group(1)) if owner_match.group(1) else None
         )
         chown_args["group"] = (
-            parser.parse_group(owner_match.group(3))
-            if owner_match.group(3)
-            else None
+            parser.parse_group(owner_match.group(3)) if owner_match.group(3) else None
         )
 
     failed = False
@@ -181,11 +177,13 @@ def python_userland_chown(opts, args):
             prev_gid = stat.st_gid
         except OSError as e:
             failed = True
-            print(e, file=sys.stderr)
-            print(
-                f"failed to change ownership of '{file}' to {owner_spec}",
-                file=sys.stderr,
-            )
+            if opts.verbosity:
+                core.perror(e)
+                if opts.verbosity > 2:
+                    print(
+                        f"failed to change ownership of '{file}' to {owner_spec}",
+                        file=sys.stderr,
+                    )
             continue
 
         prev_uname = core.user_display_name_from_id(prev_uid)
@@ -203,11 +201,12 @@ def python_userland_chown(opts, args):
         except OSError as e:
             failed = True
             if opts.verbosity:
-                print(e, file=sys.stderr)
-                print(
-                    f"failed to change ownership of '{file}' to {owner_spec}",
-                    file=sys.stderr,
-                )
+                core.perror(e)
+                if opts.verbosity > 2:
+                    print(
+                        f"failed to change ownership of '{file}' to {owner_spec}",
+                        file=sys.stderr,
+                    )
             continue
 
         if prev_uid == chown_args["user"] or prev_gid == chown_args["group"]:

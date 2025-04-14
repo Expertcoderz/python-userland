@@ -1,7 +1,6 @@
 import grp
 import pwd
 import os
-import sys
 
 from .. import core
 
@@ -21,7 +20,7 @@ def python_userland_groups(_, args):
             user_info = pwd.getpwnam(user)
         except KeyError as e:
             failed = True
-            print(e, file=sys.stderr)
+            core.perror(e)
             continue
 
         print(

@@ -1,6 +1,5 @@
 import os
 import shlex
-import sys
 
 from .. import core
 
@@ -87,7 +86,7 @@ def python_userland_env(opts, args):
         try:
             os.chdir(opts.chdir)
         except OSError as e:
-            print(e, file=sys.stderr)
+            core.perror(e)
             return 125
 
     prog_args.insert(1, opts.argv0 if opts.argv0 else prog_args[0])
@@ -95,7 +94,7 @@ def python_userland_env(opts, args):
     try:
         os.execvpe(prog_args[0], prog_args[1:], env)
     except OSError as e:
-        print(e, file=sys.stderr)
+        core.perror(e)
         return 126 if isinstance(e, FileNotFoundError) else 127
 
     return 0

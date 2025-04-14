@@ -1,4 +1,3 @@
-import sys
 from pathlib import Path
 from typing import Callable
 
@@ -92,8 +91,10 @@ def python_userland_truncate(opts, args):
             else None
         )
     except OSError as e:
-        print(e, file=sys.stderr)
+        core.perror(e)
         return 1
+
+    failed = False
 
     for file in map(
         Path, tqdm(args, ascii=True, desc="Truncating files") if opts.progress else args
@@ -109,13 +110,13 @@ def python_userland_truncate(opts, args):
         if new_size == old_size:
             continue
 
-        try:
-            with file.open("rb+") as io:
-                io.truncate(
-                    new_size * stat.st_blksize if opts.io_blocks else new_size,
-                )
-        except OSError as e:
-            print(e, file=sys.stderr)
-            return 1
+        with core.safe_open(file, "rb+") as io:
+            if not io:
+                failed = True
+                continue
 
-    return 0
+            io.truncate(
+                new_size * stat.st_blksize if opts.io_blocks else new_size,
+            )
+
+    return int(failed)

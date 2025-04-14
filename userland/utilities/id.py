@@ -1,7 +1,6 @@
 import grp
 import pwd
 import os
-import sys
 
 from .. import core
 
@@ -71,7 +70,7 @@ def python_userland_id(opts, args):
                 passwd = pwd.getpwuid(int(user))
             except (KeyError, ValueError):
                 failed = True
-                print(e, file=sys.stderr)
+                core.perror(e)
                 continue
 
         if opts.user:

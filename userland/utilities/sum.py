@@ -48,11 +48,17 @@ parser.add_option(
 
 @core.command(parser)
 def python_userland_sum(opts, args):
+    failed = False
+
     for name in args or ["-"]:
         if name == "-":
             print(SUM_ALGORITHMS[opts.algorithm](sys.stdin.buffer.read()))
         else:
-            with open(name, "rb") as io:
+            with core.safe_open(name, "rb") as io:
+                if not io:
+                    failed = True
+                    continue
+
                 print(f"{SUM_ALGORITHMS[opts.algorithm](io.read())} {name}")
 
-    return 0
+    return int(failed)

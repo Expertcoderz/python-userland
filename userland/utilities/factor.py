@@ -1,5 +1,4 @@
 import math
-import sys
 from typing import Generator, Iterable
 
 from .. import core
@@ -120,7 +119,7 @@ def python_userland_factor(opts, args):
                     raise ValueError
             except ValueError:
                 failed = True
-                print(f"'{arg}' is not a valid positive integer", file=sys.stderr)
+                core.perror(f"'{arg}' is not a valid positive integer")
                 continue
 
             if num < 2:

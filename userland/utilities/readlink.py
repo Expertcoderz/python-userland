@@ -1,4 +1,3 @@
-import sys
 from pathlib import Path
 from typing import Callable
 
@@ -86,7 +85,7 @@ def python_userland_readlink(opts, args):
     parser.expect_nargs(args, (1,))
 
     if opts.no_newline and len(args) > 1:
-        print("ignoring --no-newline with multiple arguments", file=sys.stderr)
+        core.perror("ignoring --no-newline with multiple arguments")
         opts.no_newline = False
 
     # This is the precise behavior of GNU readlink regardless
@@ -103,6 +102,6 @@ def python_userland_readlink(opts, args):
             failed = True
 
             if opts.verbose:
-                print(e, file=sys.stderr)
+                core.perror(e)
 
     return int(failed)

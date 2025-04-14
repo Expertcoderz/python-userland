@@ -1,5 +1,4 @@
 import os
-import sys
 
 from tqdm import tqdm
 
@@ -28,20 +27,18 @@ parser.add_option(
 
 @core.command(parser)
 def python_userland_sync(opts, args):
-    if args:
-        failed = False
+    if not args:
+        os.sync()
+        return 0
 
-        for name in (
-            tqdm(args, ascii=True, desc="Syncing files") if opts.progress else args
-        ):
-            try:
-                with open(name, "rb+") as io:
-                    os.fsync(io)
-            except OSError as e:
+    failed = False
+
+    for name in tqdm(args, ascii=True, desc="Syncing files") if opts.progress else args:
+        with core.safe_open(name, "rb+") as io:
+            if not io:
                 failed = True
-                print(e, file=sys.stderr)
+                continue
 
-        return int(failed)
+            os.fsync(io)
 
-    os.sync()
-    return 0
+    return int(failed)

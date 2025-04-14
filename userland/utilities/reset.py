@@ -1,5 +1,4 @@
 import os
-import sys
 
 from .. import core
 
@@ -36,7 +35,7 @@ def python_userland_reset(opts, args):
 
     if opts.q:
         if not term:
-            print("unknown terminal type ", file=sys.stderr)
+            core.perror("unknown terminal type ")
             try:
                 while True:
                     if term := input("Terminal type? "):
