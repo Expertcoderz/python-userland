@@ -1,6 +1,6 @@
 import codecs
 import re
-from optparse import OptionParser, BadOptionError, AmbiguousOptionError
+from optparse import BadOptionError, AmbiguousOptionError
 
 from .. import core
 
@@ -11,7 +11,7 @@ ESCAPES_PATTERN = re.compile(
 )
 
 
-class PassthroughOptionParser(OptionParser):
+class PassthroughOptionParser(core.ExtendedOptionParser):
     """
     A modified version of OptionParser that treats unknown options and "--" as
     regular arguments. Always behaves as if interspersed args are disabled.
@@ -34,10 +34,9 @@ class PassthroughOptionParser(OptionParser):
         rargs.clear()
 
 
-parser = core.create_parser(
+parser = PassthroughOptionParser(
     usage=("%prog [OPTION]... [STRING]...",),
     description="Print STRING(s) to standard output.",
-    parser_class=PassthroughOptionParser,
 )
 parser.disable_interspersed_args()
 

@@ -6,7 +6,7 @@ import sys
 from .. import core
 
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=("%prog [OPTION]... [USER]...",),
     description="Print user and group information for each USER or the current user.",
 )

@@ -1,7 +1,7 @@
 from .. import core
 
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     ("%prog [STRING]...",),
     description="Repeatedly output a line with STRING(s) (or 'y' by default).",
 )

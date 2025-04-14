@@ -100,7 +100,7 @@ def format_exponents(factors: Iterable[int]) -> str:
     return " ".join(processed)
 
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=("%prog [OPTION] [NUMBER]...",),
     description="Compute and print the prime factors of each positive integer NUMBER.",
 )

@@ -29,7 +29,7 @@ def resolve_filename(opts, name: str) -> str:
     return name
 
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=("%prog [OPTION]... FILE...",),
     description="Print the resolved path of each FILE.",
 )
@@ -100,8 +100,7 @@ parser.add_option(
 
 @core.command(parser)
 def python_userland_realpath(opts, args):
-    if not args:
-        parser.error("missing operand")
+    parser.expect_nargs(args, (1,))
 
     endchar = "\0" if opts.zero else "\n"
 

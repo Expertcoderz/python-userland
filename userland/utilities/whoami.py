@@ -3,7 +3,7 @@ import os
 from .. import core
 
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=("%prog",),
     description="Print the current username. Same as `id -un`.",
 )
@@ -11,8 +11,7 @@ parser = core.create_parser(
 
 @core.command(parser)
 def python_userland_whoami(_, args):
-    if args:
-        parser.error(f"extra operand '{args[0]}'")
+    parser.expect_nargs(args, 0)
 
     print(os.getlogin())
 

@@ -6,7 +6,7 @@ from .. import core
 
 # reset(1), roughly modelled off the ncurses implementation.
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=("%prog [OPTION]... [IGNORED]...",),
     description="Initialize or reset the terminal state.",
 )

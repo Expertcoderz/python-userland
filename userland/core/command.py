@@ -2,23 +2,40 @@ import sys
 from optparse import OptionParser
 from typing import Any, Callable
 
+from .users import OptionParserUsersMixin
 
-def create_parser(usage: tuple[str], **kwargs) -> OptionParser:
-    if parser_class := kwargs.get("parser_class"):
-        del kwargs["parser_class"]
 
-    parser = (parser_class or OptionParser)(
-        usage="Usage: " + f"\n{7 * " "}".join(usage),
-        **kwargs,
-        add_help_option=False,
-    )
-    parser.add_option(
-        "--help",
-        action="help",
-        help="show usage information and exit",
-    )
+class ExtendedOptionParser(OptionParserUsersMixin, OptionParser):
+    def __init__(self, usage: tuple[str], **kwargs):
+        super().__init__(
+            usage="Usage: " + f"\n{7 * " "}".join(usage),
+            add_help_option=False,
+            **kwargs,
+        )
 
-    return parser
+        self.add_option(
+            "--help",
+            action="help",
+            help="show usage information and exit",
+        )
+
+    def expect_nargs(self, args: list[str], nargs: int | tuple[int] | tuple[int, int]):
+        if isinstance(nargs, int):
+            nargs = (nargs, nargs)
+
+        if len(nargs) == 1:
+            nargs = (nargs[0], len(args))
+
+        if nargs[0] <= len(args) <= nargs[1]:
+            return
+
+        if args:
+            if len(args) < nargs[0]:
+                self.error(f"missing operand after '{args[-1]}'")
+            else:
+                self.error(f"extra operand '{args[nargs[1]]}'")
+        else:
+            self.error("missing operand")
 
 
 def command(parser: OptionParser | None = None):

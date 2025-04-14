@@ -6,7 +6,7 @@ from tqdm import tqdm
 from .. import core
 
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=("%prog [OPTION] [FILE]...",),
     description="Sync the filesystem or write each FILE's blocks to disk.",
 )

@@ -7,7 +7,7 @@ from tqdm import tqdm
 from .. import core
 
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=(
         "%prog [OPTION]... -s SIZE FILE...",
         "%prog [OPTION]... -r RFILE FILE...",

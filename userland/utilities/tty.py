@@ -4,7 +4,7 @@ import sys
 from .. import core
 
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=("%prog [OPTION]",),
     description="Print the path to the terminal connected to standard input.",
 )
@@ -20,8 +20,7 @@ parser.add_option(
 
 @core.command(parser)
 def python_userland_tty(opts, args):
-    if args:
-        parser.error(f"extra operand '{args[0]}'")
+    parser.expect_nargs(args, 0)
 
     try:
         ttyname = os.ttyname(sys.stdin.fileno())

@@ -3,7 +3,7 @@ from pathlib import PurePath
 from .. import core
 
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=("%prog [OPTION]... NAME...",),
     description=(
         "Print each path NAME with the last component removed,"
@@ -21,8 +21,7 @@ parser.add_option(
 
 @core.command(parser)
 def python_userland_dirname(opts, args):
-    if not args:
-        parser.error("missing operand")
+    parser.expect_nargs(args, (1,))
 
     for path in map(PurePath, args):
         print(path.parent, end="\0" if opts.zero else "\n")

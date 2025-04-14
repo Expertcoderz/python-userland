@@ -4,7 +4,7 @@ from decimal import Decimal, InvalidOperation
 from .. import core
 
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=(
         "%prog [OPTION]... LAST",
         "%prog [OPTION]... FIRST LAST",
@@ -36,8 +36,7 @@ parser.add_option(
 
 @core.command(parser)
 def python_userland_seq(opts, args):
-    if not args:
-        parser.error("missing operand")
+    parser.expect_nargs(args, (1, 3))
 
     if opts.format and opts.equal_width:
         parser.error("--format and --equal-width are mutually exclusive")

@@ -1,7 +1,7 @@
 from .. import core
 
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=("%prog",),
     description="Politely refuse a login.",
 )

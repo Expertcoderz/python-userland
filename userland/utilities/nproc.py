@@ -3,7 +3,7 @@ import os
 from .. import core
 
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=(" %prog [OPTION]...",),
     description="Print the number of processing units available to the process.",
 )
@@ -25,8 +25,7 @@ parser.add_option(
 
 @core.command(parser)
 def python_userland_nproc(opts, args):
-    if args:
-        parser.error(f"extra operand '{args[0]}'")
+    parser.expect_nargs(args, 0)
 
     n_cpus = os.cpu_count() if opts.all else os.process_cpu_count()
 

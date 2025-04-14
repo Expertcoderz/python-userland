@@ -7,7 +7,7 @@ from tqdm import tqdm
 from .. import core
 
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=(
         "%prog [OPTION]... GROUP FILE...",
         "%prog [OPTION]... --reference=RFILE FILE...",
@@ -126,14 +126,13 @@ parser.add_option(
 
 @core.command(parser)
 def python_userland_chgrp(opts, args):
-    if not args:
-        parser.error("missing operand")
+    parser.expect_nargs(args, (1,))
 
     from_uid: int | None = None
     from_gid: int | None = None
 
     if opts.from_spec:
-        from_uid, from_gid = core.parse_onwer_spec(parser, opts.from_spec)
+        from_uid, from_gid = parser.parse_owner_spec(opts.from_spec)
 
     gid: int
     gname: str | None = None
@@ -145,12 +144,10 @@ def python_userland_chgrp(opts, args):
             print(e, file=sys.stderr)
             return 1
     else:
+        parser.expect_nargs(args, (2,))
         gname = args.pop(0)
 
-        if not args:
-            parser.error(f"missing operand after '{gname}'")
-
-        gid = core.parse_group(parser, gname)
+        gid = parser.parse_group(gname)
 
     failed = False
 

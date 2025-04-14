@@ -3,7 +3,7 @@ from pathlib import PurePath
 from .. import core
 
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=("%prog NAME [SUFFIX]", "%prog OPTION... NAME..."),
     description="Print the last component of each path NAME.",
 )
@@ -27,14 +27,12 @@ parser.add_option(
 
 @core.command(parser)
 def python_userland_basename(opts, args):
-    if not args:
-        parser.error("missing operand")
+    parser.expect_nargs(args, (1,))
 
     if opts.suffix:
         opts.multiple = True
     elif not opts.multiple and len(args) > 1:
-        if len(args) > 2:
-            parser.error(f"extra operand '{args[2]}'")
+        parser.expect_nargs(args, 2)
 
         opts.suffix = args.pop()
     else:

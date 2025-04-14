@@ -7,7 +7,7 @@ from .. import core
 SUFFIXES = {"s": 1, "m": 60, "h": 60 * 60, "d": 24 * 60 * 60}
 
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=("%prog DURATION[SUFFIX]...",),
     description=(
         "Delay for the sum of each DURATION."

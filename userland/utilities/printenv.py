@@ -3,7 +3,7 @@ import os
 from .. import core
 
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=(" %prog [OPTION] [VARIABLE]...",),
     description="Print VARIABLE(s) or all environment variables, and their values.",
 )

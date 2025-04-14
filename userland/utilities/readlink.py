@@ -19,7 +19,7 @@ def readlink_function(can_mode: str | None) -> Callable[[Path], str]:
             return lambda path: path.resolve(strict=can_mode == "e")
 
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=("%prog [OPTION]... FILE...",),
     description="Print the target of each symbolic link FILE.",
 )
@@ -83,8 +83,7 @@ parser.add_option(
 
 @core.command(parser)
 def python_userland_readlink(opts, args):
-    if not args:
-        parser.error("missing operand")
+    parser.expect_nargs(args, (1,))
 
     if opts.no_newline and len(args) > 1:
         print("ignoring --no-newline with multiple arguments", file=sys.stderr)

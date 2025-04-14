@@ -94,7 +94,7 @@ def cat_io(opts, io: BinaryIO) -> None:
             sys.stdout.buffer.flush()
 
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=("%prog [OPTION]... [FILE]...",),
     description="Concatenate each FILE to standard output.",
 )

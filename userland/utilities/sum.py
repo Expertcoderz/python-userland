@@ -25,7 +25,7 @@ def sum_sysv(data: bytes) -> int:
 
 SUM_ALGORITHMS = {"bsd": sum_bsd, "sysv": sum_sysv}
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=("%prog [OPTION] [FILE]...",),
 )
 

@@ -11,7 +11,7 @@ from .. import core
 
 CHOWN_PATTERN = re.compile("^([^:]+)?(:([^:]+))?$")
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=(
         "%prog [OPTION]... [USER][:[GROUP]] FILE...",
         "%prog [OPTION]... --reference=RFILE FILE...",
@@ -127,14 +127,13 @@ parser.add_option(
 
 @core.command(parser)
 def python_userland_chown(opts, args):
-    if not args:
-        parser.error("missing operand")
+    parser.expect_nargs(args, (1,))
 
     from_uid: int | None = None
     from_gid: int | None = None
 
     if opts.from_spec:
-        from_uid, from_gid = core.parse_onwer_spec(parser, opts.from_spec)
+        from_uid, from_gid = parser.parse_owner_spec(opts.from_spec)
 
     chown_args = {"follow_symlinks": opts.dereference}
 
@@ -148,21 +147,19 @@ def python_userland_chown(opts, args):
         chown_args["user"] = ref_stat.st_uid
         chown_args["group"] = ref_stat.st_gid
     else:
+        parser.expect_nargs(args, (2,))
         owner_spec = args.pop(0)
-
-        if not args:
-            parser.error(f"missing operand after '{owner_spec}'")
 
         if not (owner_match := CHOWN_PATTERN.match(owner_spec)):
             parser.error(f"invalid owner spec: {owner_spec}")
 
         chown_args["user"] = (
-            core.parse_user(parser, owner_match.group(1))
+            parser.parse_user(owner_match.group(1))
             if owner_match.group(1)
             else None
         )
         chown_args["group"] = (
-            core.parse_group(parser, owner_match.group(3))
+            parser.parse_group(owner_match.group(3))
             if owner_match.group(3)
             else None
         )

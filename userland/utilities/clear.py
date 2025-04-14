@@ -3,7 +3,7 @@ from .. import core
 
 # clear(1), roughly modelled off the ncurses implementation.
 
-parser = core.create_parser(
+parser = core.ExtendedOptionParser(
     usage=("%prog [OPTION]...",),
     description="Clear the terminal screen.",
 )
