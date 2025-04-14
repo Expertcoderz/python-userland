@@ -153,11 +153,11 @@ def python_userland_cat(opts, args):
         if name == "-":
             generators.append(core.readlines_stdin_raw())
         else:
-            io = core.safe_open(name, "rb")
-            if io:
-                generators.append(io)
-            else:
+            try:
+                generators.append(open(name, "rb"))
+            except OSError as e:
                 failed = True
+                core.perror(e)
 
     try:
         cat_io(opts, itertools.chain(*generators))
