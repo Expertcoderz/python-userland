@@ -1,15 +1,15 @@
 import itertools
 import sys
 from io import BufferedReader
-from typing import BinaryIO, Generator
+from typing import Generator, Iterable
 
 from .. import core
 
 
-def squeeze_blank_lines(io: BinaryIO) -> Generator[bytes]:
+def squeeze_blank_lines(stream: Iterable[bytes]) -> Generator[bytes]:
     was_blank = False
 
-    for line in io:
+    for line in stream:
         is_blank = len(line) < 2
 
         if was_blank and is_blank:
@@ -19,14 +19,14 @@ def squeeze_blank_lines(io: BinaryIO) -> Generator[bytes]:
         was_blank = is_blank
 
 
-def number_lines(io: BinaryIO) -> Generator[bytes]:
-    for i, _ in enumerate(io):
+def number_lines(stream: Iterable[bytes]) -> Generator[bytes]:
+    for i, _ in enumerate(stream):
         yield f"{i + 1:>6}  ".encode()
 
 
-def number_nonblank_lines(io: BinaryIO) -> Generator[bytes]:
+def number_nonblank_lines(stream: Iterable[bytes]) -> Generator[bytes]:
     i = 1
-    for line in io:
+    for line in stream:
         if len(line) > 1:
             yield f"{i:>6}  ".encode()
             i += 1
@@ -62,16 +62,16 @@ def format_chars(
         yield n.to_bytes()
 
 
-def format_lines(io: BinaryIO, *args) -> Generator[bytes]:
-    for line in io:
+def format_lines(stream: Iterable[bytes], *args) -> Generator[bytes]:
+    for line in stream:
         yield b"".join(format_chars(line, *args))
 
 
-def cat_io(opts, io: BinaryIO) -> None:
+def cat_io(opts, stream: Iterable[bytes]) -> None:
     if opts.squeeze_blank:
-        io = squeeze_blank_lines(io)
+        stream = squeeze_blank_lines(stream)
 
-    io1, io2 = itertools.tee(io, 2)
+    io1, io2 = itertools.tee(stream, 2)
     gen1, gen2 = None, None
 
     if opts.number_nonblank:
@@ -95,7 +95,7 @@ def cat_io(opts, io: BinaryIO) -> None:
 
 
 parser = core.ExtendedOptionParser(
-    usage=("%prog [OPTION]... [FILE]...",),
+    usage="%prog [OPTION]... [FILE]...",
     description="Concatenate each FILE to standard output.",
 )
 
@@ -134,7 +134,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_cat(opts, args):
+def python_userland_cat(opts, args: list[str]):
     if opts.show_all:
         opts.show_ends = True
         opts.show_tabs = True
@@ -146,26 +146,26 @@ def python_userland_cat(opts, args):
         opts.show_tabs = True
         opts.show_nonprinting = True
 
-    generators: list[Generator[bytes]] = []
+    streams: list[Iterable[bytes]] = []
     failed = False
 
     for name in args or ["-"]:
         if name == "-":
-            generators.append(core.readlines_stdin_raw())
+            streams.append(core.readlines_stdin_raw())
         else:
             try:
-                generators.append(open(name, "rb"))
+                streams.append(open(name, "rb"))
             except OSError as e:
                 failed = True
                 core.perror(e)
 
     try:
-        cat_io(opts, itertools.chain(*generators))
+        cat_io(opts, itertools.chain(*streams))
     except KeyboardInterrupt:
         print()
         return 130
     finally:
-        for gen in generators:
+        for gen in streams:
             # Close opened files other than stdin.
             if isinstance(gen, BufferedReader):
                 gen.close()

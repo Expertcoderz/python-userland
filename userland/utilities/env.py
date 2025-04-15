@@ -5,7 +5,7 @@ from .. import core
 
 
 parser = core.ExtendedOptionParser(
-    usage=("%prog [OPTION]... [-] [NAME=VALUE]... [COMMAND [ARG]...]",),
+    usage="%prog [OPTION]... [-] [NAME=VALUE]... [COMMAND [ARG]...]",
     description="Run a program in a modified environment or print environment variables.",
 )
 parser.disable_interspersed_args()
@@ -50,7 +50,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_env(opts, args):
+def python_userland_env(opts, args: list[str]):
     if args and args[0] == "-":
         opts.ignore_environment = True
         del args[0]

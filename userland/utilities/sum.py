@@ -15,7 +15,7 @@ def sum_bsd(data: bytes) -> str:
 
 
 # SYSV checksum
-def sum_sysv(data: bytes) -> int:
+def sum_sysv(data: bytes) -> str:
     s = sum(data)
     r = s % 2**16 + (s % 2**32) // 2**16
     checksum = (r % 2**16) + r // 2**16
@@ -26,7 +26,7 @@ def sum_sysv(data: bytes) -> int:
 SUM_ALGORITHMS = {"bsd": sum_bsd, "sysv": sum_sysv}
 
 parser = core.ExtendedOptionParser(
-    usage=("%prog [OPTION] [FILE]...",),
+    usage="%prog [OPTION] [FILE]...",
 )
 
 parser.add_option(
@@ -47,7 +47,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_sum(opts, args):
+def python_userland_sum(opts, args: list[str]):
     failed = False
 
     for name in args or ["-"]:

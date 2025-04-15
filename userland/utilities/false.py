@@ -5,7 +5,7 @@ from .. import core
 
 
 @core.command()
-def python_userland_false(_, args):
+def python_userland_false(_, args: list[str]):
     if args and args[0] == "--help":
         print(
             f"""\

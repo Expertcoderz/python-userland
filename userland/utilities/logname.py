@@ -4,7 +4,7 @@ from .. import core
 
 
 parser = core.ExtendedOptionParser(
-    usage=("%prog",),
+    usage="%prog",
     description="Print the current user's login name.",
 )
 

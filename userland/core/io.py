@@ -1,7 +1,7 @@
 import contextlib
 import os
 import sys
-from typing import Any, Generator
+from typing import Any, Generator, IO
 
 
 def perror(*errors: Any) -> None:
@@ -12,7 +12,7 @@ def perror(*errors: Any) -> None:
 
 
 @contextlib.contextmanager
-def safe_open(*args, **kwargs):
+def safe_open(*args, **kwargs) -> Generator[IO | None]:
     try:
         with open(*args, **kwargs) as io:
             yield io

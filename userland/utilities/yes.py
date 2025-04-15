@@ -2,7 +2,7 @@ from .. import core
 
 
 parser = core.ExtendedOptionParser(
-    ("%prog [STRING]...",),
+    "%prog [STRING]...",
     description="Repeatedly output a line with STRING(s) (or 'y' by default).",
 )
 

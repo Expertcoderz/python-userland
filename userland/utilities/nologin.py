@@ -2,7 +2,7 @@ from .. import core
 
 
 parser = core.ExtendedOptionParser(
-    usage=("%prog",),
+    usage="%prog",
     description="Politely refuse a login.",
 )
 

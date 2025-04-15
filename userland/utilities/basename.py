@@ -26,7 +26,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_basename(opts, args):
+def python_userland_basename(opts, args: list[str]):
     parser.expect_nargs(args, (1,))
 
     if opts.suffix:

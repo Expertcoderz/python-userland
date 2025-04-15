@@ -9,10 +9,13 @@ applets = (applet.stem for applet in Path(file.parent, "utilities").glob("*.py")
 
 
 def print_usage(prog_name: str) -> None:
-    try:
-        version = importlib.metadata.version(__package__)
-    except importlib.metadata.PackageNotFoundError:
-        version = "(unknown version)"
+    version = "(unknown version)"
+
+    if __package__:
+        try:
+            version = importlib.metadata.version(__package__)
+        except importlib.metadata.PackageNotFoundError:
+            pass
 
     print(
         f"python-userland v{version}",
@@ -20,7 +23,7 @@ def print_usage(prog_name: str) -> None:
         f"{7 * " "}{prog_name} --list",
         "\nAvailable applets:",
         ", ".join(sorted(applets)),
-        sep="\n"
+        sep="\n",
     )
 
 

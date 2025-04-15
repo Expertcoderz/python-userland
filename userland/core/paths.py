@@ -1,10 +1,10 @@
 import sys
 from pathlib import Path
-from typing import Generator, Literal
+from typing import Generator, Iterable, Literal
 
 
 def traverse_files(
-    filenames: list[str],
+    filenames: Iterable[str],
     recurse_mode: Literal["L", "H", "P"] | None = None,
     preserve_root: bool = False,
 ) -> Generator[Path | None]:

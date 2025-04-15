@@ -1,10 +1,18 @@
 from pathlib import Path
-from typing import Callable
+from typing import Callable, cast
 
 from tqdm import tqdm
 
 from .. import core
 
+PREFIXES: dict[str, Callable[[int, int], int]] = {
+    "+": lambda old_size, size_num: old_size + size_num,
+    "-": lambda old_size, size_num: old_size - size_num,
+    "<": lambda old_size, size_num: min(old_size, size_num),
+    ">": lambda old_size, size_num: max(old_size, size_num),
+    "/": lambda old_size, size_num: size_num * (old_size // size_num),
+    "%": lambda old_size, size_num: size_num * -(old_size // -size_num),
+}
 
 parser = core.ExtendedOptionParser(
     usage=(
@@ -41,16 +49,16 @@ parser.add_option("-r", "--reference", metavar="RFILE", help="base size on RFILE
 
 
 @core.command(parser)
-def python_userland_truncate(opts, args):
+def python_userland_truncate(opts, args: list[str]):
     if opts.reference:
         opts.reference = Path(opts.reference)
 
-    size_prefix: int | None = None
+    size_prefix: str | None = None
     size_num: int | None = None
 
     if opts.size:
         if opts.size[0] in frozenset("+-<>/%"):
-            size_prefix = opts.size[0]
+            size_prefix = cast(str, opts.size[0])
 
         try:
             size_num = int(opts.size[1:] if size_prefix else opts.size)
@@ -65,22 +73,17 @@ def python_userland_truncate(opts, args):
     if not args:
         parser.error("missing file operand")
 
-    get_new_size: Callable[[int], int] = (
-        {
-            "+": lambda old_size: old_size + size_num,
-            "-": lambda old_size: old_size - size_num,
-            "<": lambda old_size: min(old_size, size_num),
-            ">": lambda old_size: max(old_size, size_num),
-            "/": lambda old_size: size_num * (old_size // size_num),
-            "%": lambda old_size: size_num * -(old_size // -size_num),
-        }[size_prefix]
-        if size_prefix
-        else (
+    get_new_size: Callable[[int], int]
+
+    if size_prefix:
+        assert size_num is not None
+        get_new_size = lambda old_size: PREFIXES[size_prefix](old_size, size_num)
+    else:
+        get_new_size = (
             (lambda _: size_num)
             if size_num is not None
             else (lambda old_size: old_size)
         )
-    )
 
     size_attr = "st_blocks" if opts.io_blocks else "st_size"
 

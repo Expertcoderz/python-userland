@@ -8,7 +8,7 @@ SUFFIXES = {"s": 1, "m": 60, "h": 60 * 60, "d": 24 * 60 * 60}
 
 
 parser = core.ExtendedOptionParser(
-    usage=("%prog DURATION[SUFFIX]...",),
+    usage="%prog DURATION[SUFFIX]...",
     description=(
         "Delay for the sum of each DURATION."
         f" SUFFIX may be one of the following: {", ".join(SUFFIXES.keys())}."

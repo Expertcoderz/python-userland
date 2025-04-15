@@ -1,5 +1,6 @@
 import math
 from decimal import Decimal, InvalidOperation
+from typing import cast
 
 from .. import core
 
@@ -35,7 +36,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_seq(opts, args):
+def python_userland_seq(opts, args: list[str]):
     parser.expect_nargs(args, (1, 3))
 
     if opts.format and opts.equal_width:
@@ -43,9 +44,19 @@ def python_userland_seq(opts, args):
 
     def arg_to_decimal(arg: str) -> Decimal:
         try:
-            return Decimal(arg)
+            result = Decimal(arg)
         except InvalidOperation:
+            result = None
+
+        if result is None or (result != 0 and not result.is_normal()):
             parser.error(f"invalid decimal argument: {arg}")
+
+        return result
+
+    first: Decimal
+    increment: Decimal
+    last: Decimal
+    exponent: int
 
     if len(args) == 1:
         first = Decimal(1)
@@ -54,16 +65,19 @@ def python_userland_seq(opts, args):
         exponent = 0
     elif len(args) == 2:
         first = arg_to_decimal(args[0])
-        exponent = first.as_tuple().exponent
+        exponent = cast(int, first.as_tuple().exponent)
         increment = Decimal(1)
         last = arg_to_decimal(args[1]).quantize(first)
     else:
         first = arg_to_decimal(args[0])
         increment = arg_to_decimal(args[1])
-        exponent = min(first.as_tuple().exponent, increment.as_tuple().exponent)
+        exponent = cast(
+            int, min(first.as_tuple().exponent, increment.as_tuple().exponent)
+        )
         last = arg_to_decimal(args[2]).quantize(
             first
-            if first.as_tuple().exponent < increment.as_tuple().exponent
+            if cast(int, first.as_tuple().exponent)
+            < cast(int, increment.as_tuple().exponent)
             else increment
         )
 

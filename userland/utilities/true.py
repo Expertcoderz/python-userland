@@ -5,7 +5,7 @@ from .. import core
 
 
 @core.command()
-def python_userland_true(_, args):
+def python_userland_true(_, args: list[str]):
     if args and args[0] == "--help":
         print(
             f"""\
@@ -16,3 +16,5 @@ Return an exit status of 0.
 Options:
   --help  show usage information and exit"""
         )
+
+    return 0

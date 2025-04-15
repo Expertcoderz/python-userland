@@ -1,5 +1,5 @@
 import math
-from typing import Generator, Iterable
+from typing import Generator, Iterable, cast
 
 from .. import core
 
@@ -76,7 +76,7 @@ def factorize(
         if factor == n:
             break
 
-        n //= factor
+        n //= cast(int, factor)
 
 
 def format_exponents(factors: Iterable[int]) -> str:
@@ -100,7 +100,7 @@ def format_exponents(factors: Iterable[int]) -> str:
 
 
 parser = core.ExtendedOptionParser(
-    usage=("%prog [OPTION] [NUMBER]...",),
+    usage="%prog [OPTION] [NUMBER]...",
     description="Compute and print the prime factors of each positive integer NUMBER.",
 )
 
@@ -108,7 +108,7 @@ parser.add_option("-h", "--exponents", action="store_true")
 
 
 @core.command(parser)
-def python_userland_factor(opts, args):
+def python_userland_factor(opts, args: list[str]):
     failed = False
 
     try:

@@ -5,7 +5,7 @@ from .. import core
 
 
 parser = core.ExtendedOptionParser(
-    usage=("%prog [OPTION]",),
+    usage="%prog [OPTION]",
     description="Print the path to the terminal connected to standard input.",
 )
 
@@ -19,7 +19,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_tty(opts, args):
+def python_userland_tty(opts, args: list[str]):
     parser.expect_nargs(args, 0)
 
     try:

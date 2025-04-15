@@ -126,7 +126,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_chown(opts, args):
+def python_userland_chown(opts, args: list[str]):
     parser.expect_nargs(args, (1,))
 
     from_uid: int | None = None
@@ -137,6 +137,8 @@ def python_userland_chown(opts, args):
 
     chown_args = {"follow_symlinks": opts.dereference}
 
+    owner_spec: str
+
     if opts.reference:
         try:
             ref_stat = Path(opts.reference).stat(follow_symlinks=True)
@@ -146,6 +148,12 @@ def python_userland_chown(opts, args):
 
         chown_args["user"] = ref_stat.st_uid
         chown_args["group"] = ref_stat.st_gid
+
+        owner_spec = (
+            core.user_display_name_from_id(ref_stat.st_uid)
+            + ":"
+            + core.group_display_name_from_id(ref_stat.st_gid)
+        )
     else:
         parser.expect_nargs(args, (2,))
         owner_spec = args.pop(0)

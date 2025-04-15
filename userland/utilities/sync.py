@@ -6,7 +6,7 @@ from .. import core
 
 
 parser = core.ExtendedOptionParser(
-    usage=("%prog [OPTION] [FILE]...",),
+    usage="%prog [OPTION] [FILE]...",
     description="Sync the filesystem or write each FILE's blocks to disk.",
 )
 
@@ -26,7 +26,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_sync(opts, args):
+def python_userland_sync(opts, args: list[str]):
     if not args:
         os.sync()
         return 0

@@ -6,7 +6,7 @@ from .. import core
 
 
 parser = core.ExtendedOptionParser(
-    usage=("%prog [OPTION]... [USER]...",),
+    usage="%prog [OPTION]... [USER]...",
     description="Print user and group information for each USER or the current user.",
 )
 
@@ -44,7 +44,7 @@ parser.add_option("-Z", "--context", action="store_true", help="(unimplemented)"
 
 
 @core.command(parser)
-def python_userland_id(opts, args):
+def python_userland_id(opts, args: list[str]):
     if opts.context:
         parser.error("--context (-Z) is not supported")
 

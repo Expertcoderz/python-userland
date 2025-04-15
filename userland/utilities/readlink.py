@@ -1,10 +1,12 @@
 from pathlib import Path
-from typing import Callable
+from typing import Callable, Literal
 
 from .. import core
 
 
-def readlink_function(can_mode: str | None) -> Callable[[Path], str]:
+def readlink_function(
+    can_mode: Literal["f", "e", "m"] | None,
+) -> Callable[[Path], Path]:
     match can_mode:
         case None:
             return lambda path: path.readlink()
@@ -19,7 +21,7 @@ def readlink_function(can_mode: str | None) -> Callable[[Path], str]:
 
 
 parser = core.ExtendedOptionParser(
-    usage=("%prog [OPTION]... FILE...",),
+    usage="%prog [OPTION]... FILE...",
     description="Print the target of each symbolic link FILE.",
 )
 
@@ -81,7 +83,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_readlink(opts, args):
+def python_userland_readlink(opts, args: list[str]):
     parser.expect_nargs(args, (1,))
 
     if opts.no_newline and len(args) > 1:

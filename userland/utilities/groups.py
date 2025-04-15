@@ -6,7 +6,7 @@ from .. import core
 
 
 parser = core.ExtendedOptionParser(
-    usage=("%prog [USERNAME]...",),
+    usage="%prog [USERNAME]...",
     description="Print a list of groups for each USERNAME or the current user.",
 )
 

@@ -4,7 +4,7 @@ from .. import core
 
 
 parser = core.ExtendedOptionParser(
-    usage=("%prog [OPTION]... NAME...",),
+    usage="%prog [OPTION]... NAME...",
     description=(
         "Print each path NAME with the last component removed,"
         " or '.' if NAME is the only component."
@@ -20,7 +20,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_dirname(opts, args):
+def python_userland_dirname(opts, args: list[str]):
     parser.expect_nargs(args, (1,))
 
     for path in map(PurePath, args):

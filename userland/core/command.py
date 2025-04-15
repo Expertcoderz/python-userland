@@ -1,14 +1,15 @@
 import sys
-from optparse import OptionParser
+from optparse import OptionParser, Values
 from typing import Any, Callable
 
 from .users import OptionParserUsersMixin
 
 
 class ExtendedOptionParser(OptionParserUsersMixin, OptionParser):
-    def __init__(self, usage: tuple[str], **kwargs):
+    def __init__(self, usage: str | tuple[str, ...], **kwargs):
         super().__init__(
-            usage="Usage: " + f"\n{7 * " "}".join(usage),
+            usage="Usage: "
+            + f"\n{7 * " "}".join(usage if isinstance(usage, tuple) else (usage,)),
             add_help_option=False,
             **kwargs,
         )
@@ -40,17 +41,12 @@ class ExtendedOptionParser(OptionParserUsersMixin, OptionParser):
 
 def command(parser: OptionParser | None = None):
     def create_utility(
-        func: Callable[[dict[str, Any], list[Any]], int],
+        func: Callable[[Values, list[Any]], int],
     ) -> Callable[[], None]:
-        if parser:
-
-            def execute_utility():
-                sys.exit(func(*parser.parse_args()))
-
-        else:
-
-            def execute_utility():
-                sys.exit(func({}, sys.argv[1:]))
+        def execute_utility():
+            sys.exit(
+                func(*parser.parse_args()) if parser else func(Values(), sys.argv[1:])
+            )
 
         return execute_utility
 

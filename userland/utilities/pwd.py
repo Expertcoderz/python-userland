@@ -4,7 +4,7 @@ from .. import core
 
 
 parser = core.ExtendedOptionParser(
-    usage=("%prog [OPTION]",),
+    usage="%prog [OPTION]",
     description="Print the path to the current working directory.",
 )
 
@@ -26,7 +26,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_pwd(opts, args):
+def python_userland_pwd(opts, args: list[str]):
     if args:
         parser.error("too many arguments")
 

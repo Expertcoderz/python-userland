@@ -2,7 +2,7 @@ from .. import core
 
 
 parser = core.ExtendedOptionParser(
-    usage=("%prog",),
+    usage="%prog",
     description="Print a 32-bit numeric host machine identifier.",
     epilog="This implementation gives an all-zero identifier.",
 )

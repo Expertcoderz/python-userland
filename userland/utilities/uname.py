@@ -14,7 +14,7 @@ UNAME_ATTRS = {
 
 
 parser = core.ExtendedOptionParser(
-    usage=("%prog [OPTION]...",),
+    usage="%prog [OPTION]...",
     description="Print system information.",
 )
 
@@ -75,7 +75,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_uname(opts, args):
+def python_userland_uname(opts, args: list[str]):
     parser.expect_nargs(args, 0)
 
     extras: list[str] = []

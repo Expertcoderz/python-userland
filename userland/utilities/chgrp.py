@@ -125,7 +125,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_chgrp(opts, args):
+def python_userland_chgrp(opts, args: list[str]):
     parser.expect_nargs(args, (1,))
 
     from_uid: int | None = None

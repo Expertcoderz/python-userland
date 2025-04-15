@@ -35,7 +35,7 @@ class PassthroughOptionParser(core.ExtendedOptionParser):
 
 
 parser = PassthroughOptionParser(
-    usage=("%prog [OPTION]... [STRING]...",),
+    usage="%prog [OPTION]... [STRING]...",
     description="Print STRING(s) to standard output.",
 )
 parser.disable_interspersed_args()
@@ -57,7 +57,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_echo(opts, args):
+def python_userland_echo(opts, args: list[str]):
     string = " ".join(args)
 
     if opts.escapes:

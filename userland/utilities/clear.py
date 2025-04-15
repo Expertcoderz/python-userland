@@ -4,7 +4,7 @@ from .. import core
 # clear(1), roughly modelled off the ncurses implementation.
 
 parser = core.ExtendedOptionParser(
-    usage=("%prog [OPTION]...",),
+    usage="%prog [OPTION]...",
     description="Clear the terminal screen.",
 )
 
@@ -14,7 +14,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_clear(opts, args):
+def python_userland_clear(opts, args: list[str]):
     if args:
         return 1
 

@@ -29,7 +29,7 @@ def resolve_filename(opts, name: str) -> str:
 
 
 parser = core.ExtendedOptionParser(
-    usage=("%prog [OPTION]... FILE...",),
+    usage="%prog [OPTION]... FILE...",
     description="Print the resolved path of each FILE.",
 )
 
@@ -98,13 +98,13 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_realpath(opts, args):
+def python_userland_realpath(opts, args: list[str]):
     parser.expect_nargs(args, (1,))
 
     endchar = "\0" if opts.zero else "\n"
 
     if opts.relative_to:
-        args = (os.path.join(opts.relative_to, name) for name in args)
+        args = [os.path.join(opts.relative_to, name) for name in args]
 
     failed = False
 
