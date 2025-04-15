@@ -59,9 +59,12 @@ def python_userland_seq(opts, args: list[str]):
     exponent: int
 
     if len(args) == 1:
+        last = arg_to_decimal(args[0])
+        if not last:
+            return 0
+
         first = Decimal(1)
         increment = Decimal(1)
-        last = arg_to_decimal(args[0])
         exponent = 0
     elif len(args) == 2:
         first = arg_to_decimal(args[0])
@@ -80,6 +83,9 @@ def python_userland_seq(opts, args: list[str]):
             < cast(int, increment.as_tuple().exponent)
             else increment
         )
+
+    if not increment:
+        parser.error(f"invalid zero increment value: '{increment}'")
 
     formatstr: str
 
