@@ -4,55 +4,55 @@ set -eux
 
 ## basic echo
 
-result="$(./echo.py foo bar)"
+result="$(python -m userland echo foo bar)"
 
 test "${result}" = 'foo bar'
 
 ## double hyphen
 
-result="$(./echo.py -- foo)"
+result="$(python -m userland echo -- foo)"
 
 test "${result}" = '-- foo'
 
 ## multiple double hyphens
 
-result="$(./echo.py -- foo --)"
+result="$(python -m userland echo -- foo --)"
 
 test "${result}" = '-- foo --'
 
 ## unknown option
 
-result="$(./echo.py -x foo)"
+result="$(python -m userland echo -x foo)"
 
 test "${result}" = '-x foo'
 
 ## unknown option and double hyphen
 
-result="$(./echo.py -x -- foo)"
+result="$(python -m userland echo -x -- foo)"
 
 test "${result}" = '-x -- foo'
 
 ## escape codes
 
-result="$(./echo.py -e 'foo \x41' '\0102')"
+result="$(python -m userland echo -e 'foo \x41' '\0102')"
 
 test "${result}" = 'foo A B'
 
 ## no arguments
 
-result="$(./echo.py)"
+result="$(python -m userland echo)"
 
 test "${result}" = "$(printf '\n')"
 
 ## empty arguments
 
-result="$(./echo.py '' foo '' bar '' '')"
+result="$(python -m userland echo '' foo '' bar '' '')"
 
 test "${result}" = ' foo  bar  '
 
 ## no trailing newline
 
-n_lines="$(./echo.py -n 'foo' | wc -l)"
+n_lines="$(python -m userland echo -n 'foo' | wc -l)"
 
 test "${n_lines}" = 0
 

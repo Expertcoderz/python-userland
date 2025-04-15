@@ -14,41 +14,41 @@ get_size() {
 
 echo 'foo bar' > "${tempdir}"/a
 
-./truncate.py -s 3 "${tempdir}"/a
+python -m userland truncate -s 3 "${tempdir}"/a
 
 test "$(cat "${tempdir}"/a)" = 'foo'
 
 ## size extension
 
-./truncate.py -s +7 "${tempdir}"/a
+python -m userland truncate -s +7 "${tempdir}"/a
 
 size="$(get_size "${tempdir}"/a)"
 test "${size}" = 10
 
 ## ensure minimum size
 
-./truncate.py -s '>5' "${tempdir}"/a
+python -m userland truncate -s '>5' "${tempdir}"/a
 
 size="$(get_size "${tempdir}"/a)"
 test "${size}" = 10
 
 ## truncate to maximum size
 
-./truncate.py -s '<8' "${tempdir}"/a
+python -m userland truncate -s '<8' "${tempdir}"/a
 
 size="$(get_size "${tempdir}"/a)"
 test "${size}" = 8
 
 ## round size to multiple
 
-./truncate.py -s %5 "${tempdir}"/a
+python -m userland truncate -s %5 "${tempdir}"/a
 
 size="$(get_size "${tempdir}"/a)"
 test "${size}" = 10
 
 ## ensure size is multiple
 
-./truncate.py -s /2 "${tempdir}"/a
+python -m userland truncate -s /2 "${tempdir}"/a
 
 size="$(get_size "${tempdir}"/a)"
 test "${size}" = 10
@@ -57,21 +57,21 @@ test "${size}" = 10
 
 touch "${tempdir}"/b
 
-./truncate.py -r "${tempdir}"/a "${tempdir}"/b
+python -m userland truncate -r "${tempdir}"/a "${tempdir}"/b
 
 size="$(get_size "${tempdir}"/b)"
 test "${size}" = 10
 
 ## truncate with reference file and size adjustment
 
-./truncate.py -r "${tempdir}"/a -s +10 "${tempdir}"/b
+python -m userland truncate -r "${tempdir}"/a -s +10 "${tempdir}"/b
 
 size="$(get_size "${tempdir}"/b)"
 test "${size}" = 20
 
 ## truncate with block size
 
-./truncate.py -s 0 -o "${tempdir}"/a
+python -m userland truncate -s 0 -o "${tempdir}"/a
 
 test ! -s "${tempdir}"/a
 
