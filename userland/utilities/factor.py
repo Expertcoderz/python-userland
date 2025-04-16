@@ -15,7 +15,7 @@ def miller_rabin(n: int) -> bool:
     d = n - 1
     s = 0
 
-    while not d & 1:
+    while d & 1 == 0:
         d >>= 1
         s += 1
 
@@ -59,7 +59,7 @@ def factorize(
     while n > 1:
         factor: int | None = None
 
-        if not n & 1:
+        if n & 1 == 0:
             yield (factor := 2)
         elif factor := cache.get(n):
             yield factor
