@@ -111,29 +111,25 @@ parser.add_option("-h", "--exponents", action="store_true")
 def python_userland_factor(opts, args: list[str]) -> int:
     failed = False
 
-    try:
-        for arg in args or core.readwords_stdin():
-            try:
-                num = int(arg)
-                if num < 0:
-                    raise ValueError
-            except ValueError:
-                failed = True
-                core.perror(f"'{arg}' is not a valid positive integer")
-                continue
+    for arg in args or core.readwords_stdin():
+        try:
+            num = int(arg)
+            if num < 0:
+                raise ValueError
+        except ValueError:
+            failed = True
+            core.perror(f"'{arg}' is not a valid positive integer")
+            continue
 
-            if num < 2:
-                print(f"{num}:")
-                continue
+        if num < 2:
+            print(f"{num}:")
+            continue
 
-            factors = sorted(factorize(num))
+        factors = sorted(factorize(num))
 
-            print(
-                f"{num}: {format_exponents(factors) if opts.exponents
-                else " ".join(map(str, factors))}"
-            )
-    except KeyboardInterrupt:
-        print()
-        return 130
+        print(
+            f"{num}: {format_exponents(factors) if opts.exponents
+            else " ".join(map(str, factors))}"
+        )
 
     return int(failed)

@@ -36,13 +36,9 @@ def python_userland_reset(opts, args: list[str]) -> int:
     if opts.q:
         if not term:
             core.perror("unknown terminal type ")
-            try:
-                while True:
-                    if term := input("Terminal type? "):
-                        break
-            except KeyboardInterrupt:
-                print()
-                return 130
+            while True:
+                if term := input("Terminal type? "):
+                    break
 
         print(term)
         return 0

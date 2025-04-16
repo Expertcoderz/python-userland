@@ -44,9 +44,13 @@ def command(parser: OptionParser | None = None):
         func: Callable[[Values, list[Any]], int],
     ) -> Callable[[], None]:
         def execute_utility():
-            sys.exit(
+            try:
+                sys.exit(
                 func(*parser.parse_args()) if parser else func(Values(), sys.argv[1:])
             )
+            except KeyboardInterrupt:
+                print()
+                sys.exit(130)
 
         return execute_utility
 

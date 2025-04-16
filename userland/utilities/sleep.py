@@ -28,10 +28,6 @@ def python_userland_sleep(_, args) -> int:
                 parser.error(f"invalid duration: {spec}")
             total_secs += Decimal(spec[:-1]) * multiplier
 
-    try:
-        time.sleep(float(total_secs))
-    except KeyboardInterrupt:
-        print()
-        return 130
+    time.sleep(float(total_secs))
 
     return 0

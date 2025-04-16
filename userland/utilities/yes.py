@@ -14,4 +14,5 @@ def python_userland_yes(_, args) -> int:
         while True:
             print(string)
     except KeyboardInterrupt:
+        # Do not emit a trailing newline on keyboard interrupt.
         return 130
