@@ -14,6 +14,7 @@ def perror(*errors: Any) -> None:
 @contextlib.contextmanager
 def safe_open(*args, **kwargs) -> Generator[IO | None]:
     try:
+        # pylint: disable=unspecified-encoding
         with open(*args, **kwargs) as io:
             yield io
     except OSError as e:

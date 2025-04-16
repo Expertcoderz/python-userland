@@ -154,6 +154,7 @@ def python_userland_cat(opts, args: list[str]):
             streams.append(core.readlines_stdin_raw())
         else:
             try:
+                # pylint: disable=consider-using-with
                 streams.append(open(name, "rb"))
             except OSError as e:
                 failed = True

@@ -49,11 +49,25 @@ parser.add_option(
 )
 
 
+def parse_env_args(args: list[str], env: dict[str, str], prog_args: list[str]) -> None:
+    parsing_decls = True
+
+    for arg in args:
+        if parsing_decls and (eq_pos := arg.find("=")) >= 0:
+            env[arg[:eq_pos]] = arg[eq_pos + 1 :]
+        else:
+            prog_args.append(arg)
+            parsing_decls = False
+
+
 @core.command(parser)
+# pylint: disable=inconsistent-return-statements
 def python_userland_env(opts, args: list[str]):
     if args and args[0] == "-":
         opts.ignore_environment = True
         del args[0]
+
+    env: dict[str, str]
 
     if opts.ignore_environment:
         env = {}
@@ -65,14 +79,7 @@ def python_userland_env(opts, args: list[str]):
         env = os.environ.copy()
 
     prog_args = []
-
-    parsing_decls = True
-    for arg in args:
-        if parsing_decls and (eq_pos := arg.find("=")) >= 0:
-            env[arg[:eq_pos]] = arg[eq_pos + 1 :]
-        else:
-            prog_args.append(arg)
-            parsing_decls = False
+    parse_env_args(args, env, prog_args)
 
     if opts.split_string:
         prog_args = shlex.split(opts.split_string) + prog_args
@@ -96,5 +103,3 @@ def python_userland_env(opts, args: list[str]):
     except OSError as e:
         core.perror(e)
         return 126 if isinstance(e, FileNotFoundError) else 127
-
-    return 0

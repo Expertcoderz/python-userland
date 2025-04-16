@@ -25,6 +25,7 @@ class OptionParserUsersMixin(OptionParser):
 
         return uid, gid
 
+    # pylint: disable=inconsistent-return-statements
     def parse_user(self, user: str) -> int:
         """
         Accept a string representing a username or UID and return the UID.
@@ -38,6 +39,7 @@ class OptionParserUsersMixin(OptionParser):
         except KeyError:
             self.error(f"invalid user: {user}")
 
+    # pylint: disable=inconsistent-return-statements
     def parse_group(self, group: str) -> int:
         """
         Accept a string representing a group name or GID and return the GID.

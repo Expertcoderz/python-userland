@@ -124,6 +124,18 @@ parser.add_option(
 )
 
 
+def get_new_group(opts, args: list[str]) -> tuple[int, str]:
+    if opts.reference:
+        gid = Path(opts.reference).stat(follow_symlinks=True).st_gid
+
+        return gid, core.group_display_name_from_id(gid)
+
+    parser.expect_nargs(args, (2,))
+    gname = args.pop(0)
+
+    return parser.parse_group(gname), gname
+
+
 @core.command(parser)
 def python_userland_chgrp(opts, args: list[str]):
     parser.expect_nargs(args, (1,))
@@ -134,22 +146,22 @@ def python_userland_chgrp(opts, args: list[str]):
     if opts.from_spec:
         from_uid, from_gid = parser.parse_owner_spec(opts.from_spec)
 
-    gid: int
-    gname: str | None = None
-
-    if opts.reference:
-        try:
-            gid = Path(opts.reference).stat(follow_symlinks=True).st_gid
-        except OSError as e:
-            core.perror(e)
-            return 1
-    else:
-        parser.expect_nargs(args, (2,))
-        gname = args.pop(0)
-
-        gid = parser.parse_group(gname)
+    try:
+        gid, gname = get_new_group(opts, args)
+    except OSError as e:
+        core.perror(e)
+        return 1
 
     failed = False
+
+    def handle_error(err: Exception, level: int, msg: str) -> None:
+        nonlocal failed
+        failed = True
+
+        if opts.verbosity:
+            core.perror(err)
+            if opts.verbosity > level:
+                print(msg, file=sys.stderr)
 
     for file in core.traverse_files(
         (
@@ -169,14 +181,7 @@ def python_userland_chgrp(opts, args: list[str]):
             prev_uid = stat.st_uid
             prev_gid = stat.st_gid
         except OSError as e:
-            failed = True
-            if opts.verbosity:
-                core.perror(e)
-                if opts.verbosity > 2:
-                    print(
-                        f"failed to change group of '{file}' to {gname or gid}",
-                        file=sys.stderr,
-                    )
+            handle_error(e, 2, f"failed to change group of '{file}' to {gname or gid}")
             continue
 
         prev_gname = core.group_display_name_from_id(prev_gid)
@@ -195,14 +200,7 @@ def python_userland_chgrp(opts, args: list[str]):
         try:
             shutil.chown(file, group=gid, follow_symlinks=opts.dereference)
         except OSError as e:
-            failed = True
-            if opts.verbosity:
-                core.perror(e)
-                if opts.verbosity > 2:
-                    print(
-                        f"failed to change group of '{file}' to {gname or gid}",
-                        file=sys.stderr,
-                    )
+            handle_error(e, 2, f"failed to change group of '{file}' to {gname or gid}")
             continue
 
         if prev_gid == gid:

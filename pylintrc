@@ -1,7 +1,5 @@
 [MESSAGES CONTROL]
 
 disable =
-    consider-using-with,
     duplicate-code,
     missing-docstring,
-    redefined-outer-name,

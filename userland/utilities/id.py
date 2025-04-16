@@ -48,13 +48,13 @@ def python_userland_id(opts, args: list[str]):
     if opts.context:
         parser.error("--context (-Z) is not supported")
 
-    if (ugG := (opts.user, opts.group, opts.groups)).count(True) > 1:
+    if (ugg := (opts.user, opts.group, opts.groups)).count(True) > 1:
         parser.error("cannot print more than one of -ugG")
 
-    if opts.name or opts.real and not any(ugG):
+    if opts.name or opts.real and not any(ugg):
         parser.error("cannot print only names or real IDs in default format")
 
-    if opts.zero and not any(ugG):
+    if opts.zero and not any(ugg):
         parser.error("option --zero not permitted in default format")
 
     process_uid = os.getuid() if opts.real else os.geteuid()
