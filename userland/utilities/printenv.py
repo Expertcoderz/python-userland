@@ -12,7 +12,7 @@ parser.add_option("-0", "--null", action="store_true")
 
 
 @core.command(parser)
-def python_userland_printenv(opts, var_names: list[str]):
+def python_userland_printenv(opts, var_names: list[str]) -> int:
     endchar = "\0" if opts.null else "\n"
 
     if not var_names:

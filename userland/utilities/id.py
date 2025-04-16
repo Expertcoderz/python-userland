@@ -44,7 +44,7 @@ parser.add_option("-Z", "--context", action="store_true", help="(unimplemented)"
 
 
 @core.command(parser)
-def python_userland_id(opts, args: list[str]):
+def python_userland_id(opts, args: list[str]) -> int:
     if opts.context:
         parser.error("--context (-Z) is not supported")
 

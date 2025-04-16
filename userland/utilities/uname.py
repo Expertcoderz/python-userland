@@ -75,7 +75,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_uname(opts, args: list[str]):
+def python_userland_uname(opts, args: list[str]) -> int:
     parser.expect_nargs(args, 0)
 
     extras: list[str] = []

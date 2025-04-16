@@ -24,7 +24,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_nproc(opts, args: list[str]):
+def python_userland_nproc(opts, args: list[str]) -> int:
     parser.expect_nargs(args, 0)
 
     n_cpus = os.cpu_count() if opts.all else os.process_cpu_count()

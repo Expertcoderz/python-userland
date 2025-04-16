@@ -8,6 +8,6 @@ parser = core.ExtendedOptionParser(
 
 
 @core.command(parser)
-def python_userland_nologin(*_):
+def python_userland_nologin(*_) -> int:
     print("This account is currently not available.")
     return 1

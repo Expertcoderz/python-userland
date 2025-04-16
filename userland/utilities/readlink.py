@@ -83,7 +83,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_readlink(opts, args: list[str]):
+def python_userland_readlink(opts, args: list[str]) -> int:
     parser.expect_nargs(args, (1,))
 
     if opts.no_newline and len(args) > 1:

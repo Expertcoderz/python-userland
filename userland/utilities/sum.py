@@ -47,7 +47,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_sum(opts, args: list[str]):
+def python_userland_sum(opts, args: list[str]) -> int:
     failed = False
 
     for name in args or ["-"]:

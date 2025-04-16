@@ -36,7 +36,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_seq(opts, args: list[str]):
+def python_userland_seq(opts, args: list[str]) -> int:
     parser.expect_nargs(args, (1, 3))
 
     if opts.format and opts.equal_width:

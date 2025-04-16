@@ -10,7 +10,7 @@ parser = core.ExtendedOptionParser(
 
 
 @core.command(parser)
-def python_userland_whoami(_, args):
+def python_userland_whoami(_, args) -> int:
     parser.expect_nargs(args, 0)
 
     print(os.getlogin())

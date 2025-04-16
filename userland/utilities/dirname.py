@@ -20,7 +20,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_dirname(opts, args: list[str]):
+def python_userland_dirname(opts, args: list[str]) -> int:
     parser.expect_nargs(args, (1,))
 
     for path in map(PurePath, args):

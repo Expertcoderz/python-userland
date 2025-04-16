@@ -63,7 +63,7 @@ def get_size_changer(prefix: str | None, num: int | None) -> Callable[[int], int
 
 
 @core.command(parser)
-def python_userland_truncate(opts, args: list[str]):
+def python_userland_truncate(opts, args: list[str]) -> int:
     if opts.reference:
         opts.reference = Path(opts.reference)
 

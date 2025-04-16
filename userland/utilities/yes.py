@@ -8,7 +8,7 @@ parser = core.ExtendedOptionParser(
 
 
 @core.command(parser)
-def python_userland_yes(_, args):
+def python_userland_yes(_, args) -> int:
     try:
         string = " ".join(args or ["y"])
         while True:

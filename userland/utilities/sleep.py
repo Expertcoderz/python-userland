@@ -17,7 +17,7 @@ parser = core.ExtendedOptionParser(
 
 
 @core.command(parser)
-def python_userland_sleep(_, args):
+def python_userland_sleep(_, args) -> int:
     total_secs = Decimal()
 
     for spec in args:

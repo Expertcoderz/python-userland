@@ -159,7 +159,7 @@ def get_new_owner(opts, args: list[str], chown_args: dict) -> str | None:
 
 
 @core.command(parser)
-def python_userland_chown(opts, args: list[str]):
+def python_userland_chown(opts, args: list[str]) -> int:
     parser.expect_nargs(args, (1,))
 
     from_uid: int | None = None

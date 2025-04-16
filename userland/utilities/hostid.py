@@ -9,7 +9,7 @@ parser = core.ExtendedOptionParser(
 
 
 @core.command(parser)
-def python_userland_hostid(_, args):
+def python_userland_hostid(_, args) -> int:
     parser.expect_nargs(args, 0)
 
     # We're not the only ones being lazy here... musl libc's gethostid(3)

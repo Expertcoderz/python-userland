@@ -14,7 +14,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_clear(opts, args: list[str]):
+def python_userland_clear(opts, args: list[str]) -> int:
     if args:
         return 1
 

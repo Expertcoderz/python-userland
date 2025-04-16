@@ -12,7 +12,7 @@ parser = core.ExtendedOptionParser(
 
 
 @core.command(parser)
-def python_userland_groups(_, args):
+def python_userland_groups(_, args) -> int:
     failed = False
 
     for user in args or [os.getlogin()]:

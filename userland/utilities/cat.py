@@ -134,7 +134,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_cat(opts, args: list[str]):
+def python_userland_cat(opts, args: list[str]) -> int:
     if opts.show_all:
         opts.show_ends = True
         opts.show_tabs = True

@@ -62,7 +62,7 @@ def parse_env_args(args: list[str], env: dict[str, str], prog_args: list[str]) -
 
 @core.command(parser)
 # pylint: disable=inconsistent-return-statements
-def python_userland_env(opts, args: list[str]):
+def python_userland_env(opts, args: list[str]) -> int:
     if args and args[0] == "-":
         opts.ignore_environment = True
         del args[0]

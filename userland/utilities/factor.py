@@ -108,7 +108,7 @@ parser.add_option("-h", "--exponents", action="store_true")
 
 
 @core.command(parser)
-def python_userland_factor(opts, args: list[str]):
+def python_userland_factor(opts, args: list[str]) -> int:
     failed = False
 
     try:

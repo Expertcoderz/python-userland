@@ -26,7 +26,7 @@ parser.add_option(
 
 
 @core.command(parser)
-def python_userland_sync(opts, args: list[str]):
+def python_userland_sync(opts, args: list[str]) -> int:
     if not args:
         os.sync()
         return 0
