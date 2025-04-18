@@ -65,7 +65,13 @@ def cut_and_print_stream(stream: Iterable[bytes], cutter: Cutter) -> None:
             sys.stdout.buffer.flush()
 
 
-parser = core.ExtendedOptionParser(usage="%prog OPTION... [FILE]...", description="wow")
+parser = core.ExtendedOptionParser(
+    usage="%prog OPTION... [FILE]...",
+    description="Print selected parts of lines from each FILE or from standard input.",
+    epilog="Each LIST contains comma-separated numbers or ranges in the format [START]-[END]."
+    " For example: 10,-5,12-13,20- means to select the bytes/fields at position 10, up to"
+    " position 5, from positions 12 to 13, and starting from position 20.",
+)
 
 parser.add_option("-b", "--bytes", metavar="LIST", help="select bytes in LIST")
 parser.add_option("-c", "--characters", metavar="LIST", help="identical to -b")
