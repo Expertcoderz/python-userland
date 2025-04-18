@@ -34,11 +34,11 @@ def python_userland_sync(opts, args: list[str]) -> int:
     failed = False
 
     for name in tqdm(args, ascii=True, desc="Syncing files") if opts.progress else args:
-        with core.safe_open(name, "rb+") as io:
-            if not io:
-                failed = True
-                continue
-
-            os.fsync(io)
+        try:
+            with open(name, "rb+") as f:
+                os.fsync(f)
+        except OSError as e:
+            failed = True
+            core.perror(e)
 
     return int(failed)

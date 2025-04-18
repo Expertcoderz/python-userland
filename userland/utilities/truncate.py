@@ -114,13 +114,13 @@ def python_userland_truncate(opts, args: list[str]) -> int:
         if new_size == old_size:
             continue
 
-        with core.safe_open(file, "rb+") as io:
-            if not io:
-                failed = True
-                continue
-
-            io.truncate(
-                new_size * stat.st_blksize if opts.io_blocks else new_size,
-            )
+        try:
+            with open(file, "rb+") as f:
+                f.truncate(
+                    new_size * stat.st_blksize if opts.io_blocks else new_size,
+                )
+        except OSError as e:
+            failed = True
+            core.perror(e)
 
     return int(failed)

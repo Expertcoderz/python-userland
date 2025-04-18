@@ -54,11 +54,11 @@ def python_userland_sum(opts, args: list[str]) -> int:
         if name == "-":
             print(SUM_ALGORITHMS[opts.algorithm](sys.stdin.buffer.read()))
         else:
-            with core.safe_open(name, "rb") as io:
-                if not io:
-                    failed = True
-                    continue
-
-                print(f"{SUM_ALGORITHMS[opts.algorithm](io.read())} {name}")
+            try:
+                with open(name, "rb") as f:
+                    print(f"{SUM_ALGORITHMS[opts.algorithm](f.read())} {name}")
+            except OSError as e:
+                failed = True
+                core.perror(e)
 
     return int(failed)

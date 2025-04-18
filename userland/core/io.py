@@ -1,7 +1,6 @@
-import contextlib
 import os
 import sys
-from typing import Any, Generator, IO
+from typing import Any, Generator
 
 
 def perror(*errors: Any) -> None:
@@ -9,17 +8,6 @@ def perror(*errors: Any) -> None:
         f"{os.path.basename(sys.argv[0])}: {"\n".join(map(str, errors))}",
         file=sys.stderr,
     )
-
-
-@contextlib.contextmanager
-def safe_open(*args, **kwargs) -> Generator[IO | None]:
-    try:
-        # pylint: disable=unspecified-encoding
-        with open(*args, **kwargs) as io:
-            yield io
-    except OSError as e:
-        perror(e)
-        yield None
 
 
 def readlines_stdin() -> Generator[str]:
