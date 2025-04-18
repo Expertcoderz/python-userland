@@ -60,7 +60,7 @@ def python_userland_seq(opts, args: list[str]) -> int:
 
     if len(args) == 1:
         last = arg_to_decimal(args[0])
-        if not last:
+        if last == 0:
             return 0
 
         first = Decimal(1)
@@ -90,7 +90,7 @@ def python_userland_seq(opts, args: list[str]) -> int:
     formatstr: str
 
     if opts.equal_width:
-        padding = math.floor(math.log10(last))
+        padding = 0 if last == 0 else math.floor(math.log10(last))
         padding += -exponent + 2 if exponent else 1
         if first < 0 or last < 0:
             padding += 1
