@@ -5,7 +5,7 @@ from pathlib import Path
 
 file = Path(__file__).resolve(strict=True)
 
-applets = (applet.stem for applet in Path(file.parent, "utilities").glob("*.py"))
+applets = (applet.stem for applet in Path(file.parent, "utilities").glob("[!_]*.py"))
 
 
 def print_usage(prog_name: str) -> None:
