@@ -1,6 +1,6 @@
 import sys
 from optparse import OptionParser, Values
-from typing import Any, Callable
+from typing import Callable
 
 from .users import OptionParserUsersMixin
 
@@ -41,7 +41,7 @@ class ExtendedOptionParser(OptionParserUsersMixin, OptionParser):
 
 def command(parser: OptionParser | None = None):
     def create_utility(
-        func: Callable[[Values, list[Any]], int],
+        func: Callable[[Values, list[str]], int],
     ) -> Callable[[], None]:
         def execute_utility():
             try:
