@@ -151,7 +151,7 @@ def python_userland_cat(opts, args: list[str]) -> int:
 
     for name in args or ["-"]:
         if name == "-":
-            streams.append(core.readlines_stdin_raw())
+            streams.append(sys.stdin.buffer)
         else:
             try:
                 # pylint: disable=consider-using-with
