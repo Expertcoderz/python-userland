@@ -6,7 +6,7 @@ from optparse import OptionParser
 
 
 class OptionParserUsersMixin(OptionParser):
-    def parse_owner_spec(self, owner_spec: str) -> tuple[int | None, int | None]:
+    def parse_owner_spec(self, owner_spec: str, /) -> tuple[int | None, int | None]:
         """
         Accept a string in the form ``[USER][:[GROUP]]`` and return the UID and GID.
         Either or both may be None if omitted from the input string.
@@ -26,7 +26,7 @@ class OptionParserUsersMixin(OptionParser):
         return uid, gid
 
     # pylint: disable=inconsistent-return-statements
-    def parse_user(self, user: str) -> int:
+    def parse_user(self, user: str, /) -> int:
         """
         Accept a string representing a username or UID and return the UID.
         An appropriate parser error is thrown if obtaining the UID fails.
@@ -40,7 +40,7 @@ class OptionParserUsersMixin(OptionParser):
             self.error(f"invalid user: {user}")
 
     # pylint: disable=inconsistent-return-statements
-    def parse_group(self, group: str) -> int:
+    def parse_group(self, group: str, /) -> int:
         """
         Accept a string representing a group name or GID and return the GID.
         An appropriate parser error is thrown if obtaining the GID fails.
@@ -55,7 +55,7 @@ class OptionParserUsersMixin(OptionParser):
 
 
 @functools.lru_cache(1000)
-def user_display_name_from_id(uid: int) -> str:
+def user_display_name_from_id(uid: int, /) -> str:
     try:
         return pwd.getpwuid(uid).pw_name
     except KeyError:
@@ -63,7 +63,7 @@ def user_display_name_from_id(uid: int) -> str:
 
 
 @functools.lru_cache(1000)
-def group_display_name_from_id(gid: int) -> str:
+def group_display_name_from_id(gid: int, /) -> str:
     try:
         return grp.getgrgid(gid).gr_name
     except KeyError:

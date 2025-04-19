@@ -6,7 +6,7 @@ from .users import OptionParserUsersMixin
 
 
 class ExtendedOptionParser(OptionParserUsersMixin, OptionParser):
-    def __init__(self, usage: str | tuple[str, ...], **kwargs):
+    def __init__(self, /, usage: str | tuple[str, ...], **kwargs):
         super().__init__(
             usage="Usage: "
             + f"\n{7 * " "}".join(usage if isinstance(usage, tuple) else (usage,)),
@@ -20,7 +20,9 @@ class ExtendedOptionParser(OptionParserUsersMixin, OptionParser):
             help="show usage information and exit",
         )
 
-    def expect_nargs(self, args: list[str], nargs: int | tuple[int] | tuple[int, int]):
+    def expect_nargs(
+        self, /, args: list[str], nargs: int | tuple[int] | tuple[int, int]
+    ):
         if isinstance(nargs, int):
             nargs = (nargs, nargs)
 
@@ -41,13 +43,15 @@ class ExtendedOptionParser(OptionParserUsersMixin, OptionParser):
 
 def command(parser: OptionParser | None = None):
     def create_utility(
-        func: Callable[[Values, list[str]], int],
+        func: Callable[[Values, list[str]], int], /
     ) -> Callable[[], None]:
         def execute_utility():
             try:
                 sys.exit(
-                func(*parser.parse_args()) if parser else func(Values(), sys.argv[1:])
-            )
+                    func(*parser.parse_args())
+                    if parser
+                    else func(Values(), sys.argv[1:])
+                )
             except KeyboardInterrupt:
                 print()
                 sys.exit(130)

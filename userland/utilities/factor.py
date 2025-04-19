@@ -8,7 +8,7 @@ from .. import core
 SMALL_PRIMES = [3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]
 
 
-def miller_rabin(n: int) -> bool:
+def miller_rabin(n: int, /) -> bool:
     """
     A deterministic version of the Miller-Rabin primality test.
     """
@@ -32,7 +32,7 @@ def miller_rabin(n: int) -> bool:
     return True
 
 
-def pollards_rho(n: int, step: int) -> int | None:
+def pollards_rho(n: int, /, step: int) -> int | None:
     """
     Pollard's rho algorithm for factorization.
 
@@ -49,7 +49,7 @@ def pollards_rho(n: int, step: int) -> int | None:
 
 
 def factorize(
-    n: int, cache: dict[int, int] = {p: p for p in SMALL_PRIMES}
+    n: int, /, *, cache: dict[int, int] = {p: p for p in SMALL_PRIMES}
 ) -> Generator[int]:
     """
     Generates prime factors of the integer n.
@@ -70,7 +70,7 @@ def factorize(
             else:
                 for i in range(1, n - 1):
                     if (factor := pollards_rho(n, i)) and factor != n:
-                        yield from factorize(min(n, factor), cache)
+                        yield from factorize(min(n, factor), cache=cache)
                         break
 
         if factor == n:
@@ -79,7 +79,7 @@ def factorize(
         n //= cast(int, factor)
 
 
-def format_exponents(factors: Iterable[int]) -> str:
+def format_exponents(factors: Iterable[int], /) -> str:
     processed: list[str] = []
 
     last_factor = 0
