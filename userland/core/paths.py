@@ -1,18 +1,18 @@
 import sys
 from pathlib import Path
-from typing import Generator, Iterable, Literal
+from typing import Iterable, Iterator, Literal
 
 
 def traverse_files(
     filenames: Iterable[str],
     recurse_mode: Literal["L", "H", "P"] | None = None,
     preserve_root: bool = False,
-) -> Generator[Path | None]:
+) -> Iterator[Path | None]:
     if not recurse_mode:
         yield from map(Path, filenames)
         return
 
-    def traverse(file: Path) -> Generator[Path]:
+    def traverse(file: Path) -> Iterator[Path]:
         for child in file.iterdir():
             if child.is_dir(follow_symlinks=recurse_mode == "L"):
                 yield from traverse(child)

@@ -1,6 +1,6 @@
 import os
 import sys
-from typing import Any, Generator, IO
+from typing import Any, IO, Iterator
 
 
 def perror(*errors: Any) -> None:
@@ -10,12 +10,12 @@ def perror(*errors: Any) -> None:
     )
 
 
-def readwords_stdin() -> Generator[str]:
+def readwords_stdin() -> Iterator[str]:
     for line in sys.stdin:
         yield from line.split()
 
 
-def readwords_stdin_raw() -> Generator[bytes]:
+def readwords_stdin_raw() -> Iterator[bytes]:
     for line in sys.stdin.buffer:
         yield from line.split()
 
@@ -23,7 +23,7 @@ def readwords_stdin_raw() -> Generator[bytes]:
 def get_lines_by_delimiter[T: (
     str,
     bytes,
-)](stream: IO[T], delimiter: T) -> Generator[T]:
+)](stream: IO[T], delimiter: T) -> Iterator[T]:
     joiner = type(delimiter)()
     line = []
 

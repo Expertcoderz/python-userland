@@ -1,12 +1,12 @@
 import itertools
 import sys
 from io import BufferedReader
-from typing import Generator, Iterable
+from typing import Iterable, Iterator
 
 from .. import core
 
 
-def squeeze_blank_lines(stream: Iterable[bytes]) -> Generator[bytes]:
+def squeeze_blank_lines(stream: Iterable[bytes]) -> Iterator[bytes]:
     was_blank = False
 
     for line in stream:
@@ -19,12 +19,12 @@ def squeeze_blank_lines(stream: Iterable[bytes]) -> Generator[bytes]:
         was_blank = is_blank
 
 
-def number_lines(stream: Iterable[bytes]) -> Generator[bytes]:
+def number_lines(stream: Iterable[bytes]) -> Iterator[bytes]:
     for i, _ in enumerate(stream):
         yield f"{i + 1:>6}  ".encode()
 
 
-def number_nonblank_lines(stream: Iterable[bytes]) -> Generator[bytes]:
+def number_nonblank_lines(stream: Iterable[bytes]) -> Iterator[bytes]:
     i = 1
     for line in stream:
         if len(line) > 1:
@@ -36,7 +36,7 @@ def number_nonblank_lines(stream: Iterable[bytes]) -> Generator[bytes]:
 
 def format_chars(
     data: bytes, show_ends: bool, show_tabs: bool, show_nonprinting: bool
-) -> Generator[bytes]:
+) -> Iterator[bytes]:
     for n in data:
         if n == ord(b"\n"):
             if show_ends:
@@ -62,7 +62,7 @@ def format_chars(
         yield n.to_bytes()
 
 
-def format_lines(stream: Iterable[bytes], *args) -> Generator[bytes]:
+def format_lines(stream: Iterable[bytes], *args) -> Iterator[bytes]:
     for line in stream:
         yield b"".join(format_chars(line, *args))
 

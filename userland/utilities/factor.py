@@ -1,5 +1,5 @@
 import math
-from typing import Generator, Iterable, cast
+from typing import Iterable, Iterator, cast
 
 from .. import core
 
@@ -50,7 +50,7 @@ def pollards_rho(n: int, /, step: int) -> int | None:
 
 def factorize(
     n: int, /, *, cache: dict[int, int] = {p: p for p in SMALL_PRIMES}
-) -> Generator[int]:
+) -> Iterator[int]:
     """
     Generates prime factors of the integer n.
 
