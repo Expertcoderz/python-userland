@@ -1,6 +1,6 @@
 import sys
+from collections.abc import Callable
 from optparse import OptionParser, Values
-from typing import Callable
 
 from .users import OptionParserUsersMixin
 

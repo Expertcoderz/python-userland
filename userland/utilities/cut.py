@@ -1,5 +1,6 @@
 import sys
-from typing import BinaryIO, Callable, Iterable, cast
+from collections.abc import Callable
+from typing import BinaryIO, Iterable, cast
 
 from .. import core
 
