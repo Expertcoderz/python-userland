@@ -23,8 +23,6 @@ def sum_sysv(data: bytes) -> str:
     return f"{checksum:03} {-(len(data) // -512)}"
 
 
-SUM_ALGORITHMS = {"bsd": sum_bsd, "sysv": sum_sysv}
-
 parser = core.ExtendedOptionParser(
     usage="%prog [OPTION] [FILE]...",
 )
@@ -33,15 +31,15 @@ parser.add_option(
     "-r",
     dest="algorithm",
     action="store_const",
-    const="bsd",
-    default="bsd",
-    help="use the BSD (16-bit) checksum algorithm (1KiB blocks)",
+    const=sum_bsd,
+    default=sum_bsd,
+    help="use the BSD (16-bit) checksum algorithm (1KiB blocks) (default)",
 )
 parser.add_option(
     "-s",
     dest="algorithm",
     action="store_const",
-    const="sysv",
+    const=sum_sysv,
     help="use the System V sum algorithm (512B blocks)",
 )
 
@@ -52,11 +50,11 @@ def python_userland_sum(opts, args: list[str]) -> int:
 
     for name in args or ["-"]:
         if name == "-":
-            print(SUM_ALGORITHMS[opts.algorithm](sys.stdin.buffer.read()))
+            print(opts.algorithm(sys.stdin.buffer.read()))
         else:
             try:
                 with open(name, "rb") as f:
-                    print(f"{SUM_ALGORITHMS[opts.algorithm](f.read())} {name}")
+                    print(f"{opts.algorithm(f.read())} {name}")
             except OSError as e:
                 failed = True
                 core.perror(e)
