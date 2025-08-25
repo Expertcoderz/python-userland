@@ -25,6 +25,7 @@ def sum_sysv(data: bytes) -> str:
 
 parser = core.ExtendedOptionParser(
     usage="%prog [OPTION] [FILE]...",
+    description="Print the BSD or System V checksum for each FILE.",
 )
 
 parser.add_option(
